@@ -1,3 +1,5 @@
+import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +11,21 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppColor.appBar,
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: AppColor.appBar,
+            selectedIconTheme: IconThemeData(
+              color: Colors.blue,
+            ),
+          ),
+          brightness: Brightness.dark),
+      initialRoute: AppRoute.home,
+      routes: AppRoute.routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
