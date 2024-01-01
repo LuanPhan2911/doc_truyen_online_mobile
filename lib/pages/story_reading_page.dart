@@ -7,7 +7,7 @@ class StoryReadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tu truyen"),
+        title: const Text("Tủ truyện"),
       ),
     );
   }

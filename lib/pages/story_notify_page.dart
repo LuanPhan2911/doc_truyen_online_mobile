@@ -7,7 +7,7 @@ class StoryNotifyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notify"),
+        title: const Text("Thông báo"),
       ),
     );
   }
