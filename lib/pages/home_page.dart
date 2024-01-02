@@ -1,3 +1,5 @@
+import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,7 +10,14 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("DS. Truyện"),
-          actions: [Icon(Icons.search)],
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoute.storySearch);
+              },
+              icon: const Icon(Icons.search),
+            )
+          ],
         ),
         body: ListView(
           children: [
@@ -16,9 +25,17 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("Mới nhất"),
+                    title: const Text(
+                      "Mới nhất",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     trailing: const Icon(Icons.navigate_next),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AppRoute.storySearch);
+                    },
                   ),
                   SizedBox(
                       height: 350,
@@ -32,14 +49,24 @@ class HomePage extends StatelessWidget {
                                 tabAlignment: TabAlignment.start,
                                 labelPadding: const EdgeInsets.all(5),
                                 tabs: List.generate(8, (index) {
-                                  return Container(
-                                    padding: EdgeInsets.zero,
-                                    width: 60,
-                                    height: 80,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: Image.network(
-                                        "https://imgupscaler.com/images/samples/anime-after.webp",
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                        AppRoute.storyDetail,
+                                        arguments: StoryArgument(
+                                          slug: "abc",
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.zero,
+                                      width: 60,
+                                      height: 80,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Image.network(
+                                          "https://imgupscaler.com/images/samples/anime-after.webp",
+                                        ),
                                       ),
                                     ),
                                   );
@@ -95,7 +122,15 @@ class HomePage extends StatelessWidget {
                                             SizedBox(
                                               width: 100,
                                               child: TextButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pushNamed(
+                                                    AppRoute.storyDetail,
+                                                    arguments: StoryArgument(
+                                                      slug: "abc",
+                                                    ),
+                                                  );
+                                                },
                                                 style: TextButton.styleFrom(
                                                     backgroundColor:
                                                         Colors.black,
@@ -108,14 +143,24 @@ class HomePage extends StatelessWidget {
                                         ),
                                       ),
                                       Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(8),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              child: Image.network(
-                                                "https://imgupscaler.com/images/samples/anime-after.webp",
-                                              )),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).pushNamed(
+                                              AppRoute.storyDetail,
+                                              arguments: StoryArgument(
+                                                slug: "abc",
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                child: Image.network(
+                                                  "https://imgupscaler.com/images/samples/anime-after.webp",
+                                                )),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -131,9 +176,17 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("Đề cử"),
+                    title: const Text(
+                      "Đề cử",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     trailing: const Icon(Icons.navigate_next),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AppRoute.storySearch);
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -150,7 +203,14 @@ class HomePage extends StatelessWidget {
                         itemCount: 6,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                AppRoute.storyDetail,
+                                arguments: StoryArgument(
+                                  slug: "abc",
+                                ),
+                              );
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Column(
@@ -191,15 +251,23 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   ListTile(
-                    title: const Text("Mới đăng"),
+                    title: const Text(
+                      "Mới đăng",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     trailing: const Icon(Icons.navigate_next),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AppRoute.storySearch);
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       width: double.infinity,
-                      height: 500,
+                      height: 250,
                       child: GridView.builder(
                         scrollDirection: Axis.horizontal,
                         gridDelegate:
@@ -211,7 +279,14 @@ class HomePage extends StatelessWidget {
                         itemCount: 10,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                AppRoute.storyDetail,
+                                arguments: StoryArgument(
+                                  slug: "abc",
+                                ),
+                              );
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Column(
