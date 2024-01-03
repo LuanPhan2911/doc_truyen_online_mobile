@@ -1,4 +1,6 @@
 import 'package:doc_truyen_online_mobile/components/bottom_navigate.dart';
+import 'package:doc_truyen_online_mobile/components/comments.dart';
+import 'package:doc_truyen_online_mobile/components/comments_child.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/pages/forgot_password_page.dart';
 import 'package:doc_truyen_online_mobile/pages/home_page.dart';
@@ -24,6 +26,8 @@ class AppRoute {
   static String storySearch = "/search";
   static String storyDetail = "/story";
   static String chapter = "/chapter";
+  static String comment = "/comment";
+  static String commentChild = "/comment/child";
   static final routes = {
     home: (context) => const BottomNavigate(),
     login: (context) => const LoginPage(),
@@ -33,6 +37,8 @@ class AppRoute {
     storySearch: (context) => const StorySearchPage(),
     storyDetail: (context) => const StoryDetail(),
     chapter: (context) => const ChapterPage(),
+    comment: (context) => const Comments(),
+    commentChild: (context) => const CommentsChild(),
   };
   static const bottomNavigate = [
     StoryReadingPage(),
