@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class StorySearchPage extends StatefulWidget {
@@ -29,21 +31,27 @@ class _StorySearchPageState extends State<StorySearchPage> {
     scrollController.addListener(loadMore);
   }
 
-  void handleSearch() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      print(searchController.text);
-    });
-  }
+  void handleSearch() {}
 
-  void loadMore() {
+  void loadMore() async {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
-      setState(() {
-        Timer(const Duration(milliseconds: 2000), () {
-          item.addAll(List.generate(2, (index) => index));
-        });
-      });
+      try {
+        isLoading = true;
+        await getStories();
+      } catch (e) {
+        print(e);
+      } finally {
+        isLoading = false;
+      }
+      setState(() {});
     }
+  }
+
+  Future getStories() {
+    return Future.delayed(const Duration(seconds: 2), () {
+      item.addAll(List.generate(2, (index) => index));
+    });
   }
 
   @override
@@ -103,16 +111,9 @@ class _StorySearchPageState extends State<StorySearchPage> {
                           );
                         },
                         child: Container(
-                          width: 100,
-                          height: 120,
-                          padding: EdgeInsets.zero,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
-                              "https://imgupscaler.com/images/samples/anime-after.webp",
-                            ),
-                          ),
-                        ),
+                            width: 100,
+                            height: 120,
+                            child: const StoryAvatar()),
                       ),
                     ),
                     Expanded(
@@ -122,8 +123,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
                         children: [
                           RichText(
                             text: const TextSpan(
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 15),
+                              style: AppText.contentBlue,
                               children: <TextSpan>[
                                 TextSpan(text: "#Đô thị"),
                                 TextSpan(text: "#Tác giả"),
@@ -144,10 +144,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
                             },
                             child: Text(
                               "Tên truyện $index",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                              ),
+                              style: AppText.subtitle,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -157,7 +154,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
                           ),
                           const Text(
                             'Tên tác giả',
-                            style: TextStyle(fontSize: 16),
+                            style: AppText.content,
                           ),
                           const SizedBox(
                             height: 10,
@@ -167,16 +164,13 @@ class _StorySearchPageState extends State<StorySearchPage> {
                             WidgetSpan(
                                 child: Icon(
                               Icons.star,
-                              size: 16,
                             )),
-                            TextSpan(text: "0.0"),
-                            TextSpan(text: "  "),
+                            TextSpan(text: "0.0", style: AppText.content),
                             WidgetSpan(
                                 child: Icon(
                               Icons.book,
-                              size: 16,
                             )),
-                            TextSpan(text: "512"),
+                            TextSpan(text: "512", style: AppText.content),
                           ]))
                         ],
                       ),

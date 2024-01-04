@@ -1,17 +1,16 @@
-import 'package:doc_truyen_online_mobile/components/bottom_navigate.dart';
-import 'package:doc_truyen_online_mobile/components/comments.dart';
-import 'package:doc_truyen_online_mobile/components/comments_child.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/bottom_navigate.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
-import 'package:doc_truyen_online_mobile/pages/forgot_password_page.dart';
+import 'package:doc_truyen_online_mobile/pages/auth/forgot_password_page.dart';
 import 'package:doc_truyen_online_mobile/pages/home_page.dart';
-import 'package:doc_truyen_online_mobile/pages/login_page.dart';
+import 'package:doc_truyen_online_mobile/pages/auth/login_page.dart';
 import 'package:doc_truyen_online_mobile/pages/profile_page.dart';
-import 'package:doc_truyen_online_mobile/pages/register_page.dart';
+import 'package:doc_truyen_online_mobile/pages/auth/register_page.dart';
 import 'package:doc_truyen_online_mobile/pages/story_detail.dart';
 import 'package:doc_truyen_online_mobile/pages/story_notify_page.dart';
 import 'package:doc_truyen_online_mobile/pages/story_reading_page.dart';
 import 'package:doc_truyen_online_mobile/pages/story_search_page.dart';
-import 'package:doc_truyen_online_mobile/pages/verify_email_page.dart';
+import 'package:doc_truyen_online_mobile/pages/auth/verify_email_page.dart';
 
 class AppRoute {
   static String home = "/";
@@ -27,7 +26,6 @@ class AppRoute {
   static String storyDetail = "/story";
   static String chapter = "/chapter";
   static String comment = "/comment";
-  static String commentChild = "/comment/child";
   static final routes = {
     home: (context) => const BottomNavigate(),
     login: (context) => const LoginPage(),
@@ -38,7 +36,6 @@ class AppRoute {
     storyDetail: (context) => const StoryDetail(),
     chapter: (context) => const ChapterPage(),
     comment: (context) => const Comments(),
-    commentChild: (context) => const CommentsChild(),
   };
   static const bottomNavigate = [
     StoryReadingPage(),

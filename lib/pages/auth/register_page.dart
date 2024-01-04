@@ -1,3 +1,4 @@
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -54,11 +55,10 @@ class RegisterPage extends StatelessWidget {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
+                  style: AppColor.textBtnBlue,
+                  child: const Text(
+                    'Đăng ký',
                   ),
-                  child: const Text('Đăng ký'),
                 ),
               ),
             ],

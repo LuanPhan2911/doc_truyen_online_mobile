@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:doc_truyen_online_mobile/components/chapter_config_info.dart';
-import 'package:doc_truyen_online_mobile/components/chapter_config_setting.dart';
+import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_info.dart';
+import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_setting.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class ChapterPage extends StatelessWidget {
@@ -19,10 +20,16 @@ class ChapterPage extends StatelessWidget {
                 labelPadding: EdgeInsets.all(5),
                 tabs: [
                   Tab(
-                    child: Text("Thông tin"),
+                    child: Text(
+                      "Thông tin",
+                      style: AppText.subtitle,
+                    ),
                   ),
                   Tab(
-                    child: Text("Cài đặt"),
+                    child: Text(
+                      "Cài đặt",
+                      style: AppText.subtitle,
+                    ),
                   ),
                 ],
               ),

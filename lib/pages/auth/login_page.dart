@@ -1,4 +1,5 @@
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -8,7 +9,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Đăng nhập"),
+        title: const Text(
+          "Đăng nhập",
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -47,10 +50,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushNamed(AppRoute.home);
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                  ),
+                  style: AppColor.textBtnBlue,
                   child: const Text(
                     'Đăng nhập',
                   ),
@@ -65,10 +65,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushNamed(AppRoute.register);
                   },
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                    foregroundColor: Colors.white,
-                  ),
+                  style: AppColor.textBtnGrey,
                   child: const Text('Đăng ký'),
                 ),
               ),
@@ -83,7 +80,7 @@ class LoginPage extends StatelessWidget {
                       Navigator.of(context).pushNamed(AppRoute.verifyEmail);
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColor.white,
                     ),
                     child: const Text("Gửi email kích hoạt"),
                   ),
@@ -92,7 +89,7 @@ class LoginPage extends StatelessWidget {
                       Navigator.of(context).pushNamed(AppRoute.forgotPassword);
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColor.white,
                     ),
                     child: const Text("Quên mật khẩu"),
                   ),

@@ -1,7 +1,9 @@
-import 'package:doc_truyen_online_mobile/components/comment.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comment.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
 import 'package:flutter/material.dart';
 
 class CommentsChild extends StatelessWidget {
+  static bool isChild = true;
   const CommentsChild({super.key});
 
   @override
@@ -10,29 +12,23 @@ class CommentsChild extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Chi tiết bình luận"),
       ),
-      bottomSheet: TextField(
-        decoration: InputDecoration(
-          hintText: "Thêm bình luận",
-          prefixIcon: const Icon(Icons.message),
-          suffixIcon: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.send),
-          ),
-        ),
+      bottomSheet: CommentForm(
+        isChild: true,
       ),
       body: Container(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
-          const Comment(),
+          Comment(
+            isChild: isChild,
+          ),
           const Divider(),
-          Container(
-            padding: const EdgeInsets.all(8),
-            width: double.infinity,
-            height: 500,
+          Expanded(
             child: ListView(
               children: [
                 ...List.generate(100, (index) {
-                  return const Comment();
+                  return Comment(
+                    isChild: isChild,
+                  );
                 })
               ],
             ),

@@ -19,8 +19,12 @@ class MainApp extends StatelessWidget {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: AppColor.appBar,
           selectedIconTheme: IconThemeData(
-            color: Colors.blue,
+            color: AppColor.blue,
           ),
+        ),
+        tabBarTheme: const TabBarTheme(
+          labelColor: AppColor.blue,
+          indicatorColor: AppColor.blue,
         ),
         brightness: Brightness.dark,
       ),

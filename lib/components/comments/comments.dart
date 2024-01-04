@@ -1,5 +1,5 @@
-import 'package:doc_truyen_online_mobile/components/comment.dart';
-import 'package:doc_truyen_online_mobile/components/comment_form.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comment.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
@@ -13,22 +13,8 @@ class Comments extends StatelessWidget {
       appBar: AppBar(
         title: const Text("127182 bình luận"),
         centerTitle: true,
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem(
-                  child: Text("Mới nhất"),
-                ),
-                PopupMenuItem(
-                  child: Text("Củ nhất"),
-                ),
-              ];
-            },
-          )
-        ],
       ),
-      bottomSheet: const CommentForm(),
+      bottomSheet: CommentForm(),
       body: ListView(
         children: [
           ...List.generate(100, (index) {

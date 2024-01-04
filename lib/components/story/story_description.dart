@@ -1,3 +1,5 @@
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class StoryDescription extends StatelessWidget {
@@ -10,46 +12,26 @@ class StoryDescription extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Colors.black,
-            ),
+            decoration: AppColor.textBoxBlack,
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
                   children: [
-                    Text(
-                      '15',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text("Chương/Tuần"),
+                    Text('15', style: AppText.bigTitle),
+                    Text("Chương/Tuần", style: AppText.content),
                   ],
                 ),
                 Column(
                   children: [
-                    Text(
-                      '599',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text("Chương- Đang ra"),
+                    Text('599', style: AppText.bigTitle),
+                    Text("Chương- Đang ra", style: AppText.content),
                   ],
                 ),
                 Column(
                   children: [
-                    Text(
-                      '599',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text("Lượt đọc"),
+                    Text('599', style: AppText.bigTitle),
+                    Text("Lượt đọc", style: AppText.content),
                   ],
                 ),
               ],
@@ -75,7 +57,7 @@ class StoryDescription extends StatelessWidget {
               "37:05 Lưu Luyến Sau Chia Tay - Try92 ft Kai06\n"
               "40:45 Umee - H2K\n"
               "1:21:49 Kẻ Theo Đuổi Ánh Sáng - buitruonglinh\n",
-              style: TextStyle(fontSize: 16),
+              style: AppText.content,
             ),
           )
         ],
