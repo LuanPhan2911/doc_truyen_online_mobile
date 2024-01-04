@@ -21,48 +21,6 @@ class StoryDetail extends StatelessWidget {
         elevation: 0,
       ),
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(10),
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(children: [
-            const Expanded(
-              flex: 3,
-              child: Text(
-                "Teen truwyenw",
-                style: TextStyle(
-                  fontSize: 16,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                maxLines: 1,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    AppRoute.chapter,
-                    arguments: ChapterArgument(
-                      slug: "abc",
-                      index: 1,
-                    ),
-                  );
-                },
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white),
-                child: const Text("Đọc"),
-              ),
-            )
-          ]),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -164,6 +122,7 @@ class StoryDetail extends StatelessWidget {
               ),
             ),
             Container(
+              padding: const EdgeInsets.all(8),
               width: double.infinity,
               height: 500,
               child: DefaultTabController(
