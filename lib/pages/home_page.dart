@@ -2,7 +2,6 @@ import 'package:doc_truyen_online_mobile/components/story/story_favorite.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_new_created.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_newest.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {

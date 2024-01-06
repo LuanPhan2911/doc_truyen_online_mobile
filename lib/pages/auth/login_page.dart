@@ -1,9 +1,46 @@
-import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/styles/app_color.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class LoginPage extends StatelessWidget {
+import 'package:dio/dio.dart' as Dio;
+import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
+import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/helpers/helper.dart';
+import 'package:doc_truyen_online_mobile/helpers/toast.dart';
+import 'package:doc_truyen_online_mobile/services/app_http.dart';
+import 'package:doc_truyen_online_mobile/services/auth_service.dart';
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  void handleLogin(context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        Dio.Response res = await AuthService.login({
+          "email": _emailController.text,
+          "password": _passwordController.text,
+          "device_name": "mobile",
+        });
+
+        String token = res.data['token'];
+        Provider.of<AuthProvider>(context, listen: false).login(token: token);
+        Toast.success(context, "Đăng nhập thành công");
+        Navigator.of(context).pop();
+      } on Dio.DioException catch (e) {
+        Toast.error(context, "Email hoặc mật khẩu không đúng");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,88 +51,104 @@ class LoginPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.network(
-                "https://imgupscaler.com/images/samples/anime-after.webp",
-                width: 200,
-                height: 200,
-              ),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(
+                  "https://imgupscaler.com/images/samples/anime-after.webp",
+                  width: 200,
+                  height: 200,
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Mật khẩu',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoute.home);
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Vui lòng điền email!';
+                    }
+                    return null;
                   },
-                  style: AppColor.textBtnBlue,
-                  child: const Text(
-                    'Đăng nhập',
-                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoute.register);
+                const SizedBox(
+                  height: 16,
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    hintText: 'Mật khẩu',
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Vui lòng điền mật khẩu!';
+                    }
+                    return null;
                   },
-                  style: AppColor.textBtnGrey,
-                  child: const Text('Đăng ký'),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoute.verifyEmail);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColor.white,
+                const SizedBox(
+                  height: 16,
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () => handleLogin(context),
+                    style: AppColor.textBtnBlue,
+                    child: const Text(
+                      'Đăng nhập',
                     ),
-                    child: const Text("Gửi email kích hoạt"),
                   ),
-                  TextButton(
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoute.forgotPassword);
+                      Navigator.of(context).pushNamed(AppRoute.register);
                     },
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColor.white,
-                    ),
-                    child: const Text("Quên mật khẩu"),
+                    style: AppColor.textBtnGrey,
+                    child: const Text('Đăng ký'),
                   ),
-                ],
-              )
-            ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(AppRoute.verifyEmail);
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColor.white,
+                      ),
+                      child: const Text("Gửi email kích hoạt"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(AppRoute.forgotPassword);
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColor.white,
+                      ),
+                      child: const Text("Quên mật khẩu"),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
