@@ -2,12 +2,11 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_list.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_description.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_detail_background.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/data/arguments/chapter_argument.dart';
-import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
@@ -146,8 +145,13 @@ class _StoryDetailState extends State<StoryDetail> {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(AppRoute.comment);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) {
+                                    return Comments(
+                                      storyId: storyDetail.id!,
+                                    );
+                                  },
+                                ));
                               },
                               style: AppColor.textBtnBlue,
                               child: const Text(
@@ -156,7 +160,9 @@ class _StoryDetailState extends State<StoryDetail> {
                               ),
                             ),
                           ),
-                          const ChapterList(),
+                          ChapterList(
+                            slug: storyDetail.slug,
+                          ),
                         ],
                       ),
                     ),

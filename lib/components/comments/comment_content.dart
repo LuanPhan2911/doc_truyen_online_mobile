@@ -1,24 +1,42 @@
 import 'package:doc_truyen_online_mobile/components/comments/comments_child.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/data/models/comment.dart';
+import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
-class Comment extends StatelessWidget {
+class CommentContent extends StatefulWidget {
+  final Comment comment;
   final bool isChild;
-  const Comment({super.key, this.isChild = false});
+  const CommentContent({
+    super.key,
+    required this.comment,
+    required this.isChild,
+  });
+
+  @override
+  State<CommentContent> createState() => _CommentContentState();
+}
+
+class _CommentContentState extends State<CommentContent> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(isChild);
+    Comment comment = widget.comment;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundImage: NetworkImage(
-              "https://imgupscaler.com/images/samples/anime-after.webp",
+              Helper.asset(comment.user.avatar!),
             ),
           ),
           const SizedBox(
@@ -28,12 +46,12 @@ class Comment extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Tên ủe",
+                Text(
+                  comment.user.name,
                   style: AppText.subtitle,
                 ),
-                const ReadMoreText(
-                  'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                ReadMoreText(
+                  widget.comment.message,
                   trimLines: 3,
                   trimMode: TrimMode.Line,
                   trimCollapsedText: 'đọc tiếp',
@@ -45,9 +63,10 @@ class Comment extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Expanded(
-                        child:
-                            Text("3 nam turco", style: AppText.smallContent)),
+                    Expanded(
+                      child: Text(comment.createdAt.toString(),
+                          style: AppText.smallContent),
+                    ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -58,18 +77,20 @@ class Comment extends StatelessWidget {
                               leading: Icon(Icons.thumb_up),
                             ),
                           ),
-                          isChild
+                          widget.isChild
                               ? const SizedBox()
                               : Expanded(
                                   child: ListTile(
-                                    title: const Text("3",
+                                    title: Text(comment.repliesCount,
                                         style: AppText.smallContent),
                                     leading: const Icon(Icons.comment),
                                     onTap: () {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) {
-                                          return const CommentsChild();
+                                          return CommentsChild(
+                                            commentParent: comment,
+                                          );
                                         },
                                       ));
                                     },

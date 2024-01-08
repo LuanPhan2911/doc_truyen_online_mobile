@@ -5,8 +5,16 @@ import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_setti
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
-class ChapterPage extends StatelessWidget {
-  const ChapterPage({super.key});
+class ChapterPage extends StatefulWidget {
+  final String slug;
+  final String index;
+  const ChapterPage({super.key, required this.slug, required this.index});
+
+  @override
+  State<ChapterPage> createState() => _ChapterPageState();
+}
+
+class _ChapterPageState extends State<ChapterPage> {
   void showChapterConfig({required context}) {
     showModalBottomSheet(
       context: context,

@@ -43,9 +43,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _nameController.text = user!.name;
     _birthDateController.text = user.birthDate ?? "";
     _descriptionController.text = user.description ?? "";
-    _emailController.text = user.email;
+    _emailController.text = user.email!;
     avatar = user.avatar;
-    gender = user.gender;
+    gender = user.gender!;
   }
 
   void handleEditUser(context) async {

@@ -24,8 +24,6 @@ class AppRoute {
   static String forgotPassword = "/forgot_password";
   static String storySearch = "/search";
   static String storyDetail = "/story";
-  static String chapter = "/chapter";
-  static String comment = "/comment";
   static final routes = {
     home: (context) => const BottomNavigate(),
     login: (context) => const LoginPage(),
@@ -33,8 +31,6 @@ class AppRoute {
     verifyEmail: (context) => const VerifyEmailPage(),
     forgotPassword: (context) => const ForgotPasswordPage(),
     storySearch: (context) => const StorySearchPage(),
-    chapter: (context) => const ChapterPage(),
-    comment: (context) => const Comments(),
   };
   static const bottomNavigate = [
     StoryReadingPage(),

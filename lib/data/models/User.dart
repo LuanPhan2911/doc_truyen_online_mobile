@@ -1,10 +1,10 @@
 class User {
   String id;
   String name;
-  String email;
+  String? email;
   String? avatar;
   String? birthDate;
-  String gender;
+  String? gender;
   String? description;
 
   User({
