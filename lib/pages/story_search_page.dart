@@ -111,9 +111,10 @@ class _StorySearchPageState extends State<StorySearchPage> {
                           );
                         },
                         child: Container(
-                            width: 100,
-                            height: 120,
-                            child: const StoryAvatar()),
+                          width: 100,
+                          height: 120,
+                          // child: const StoryAvatar(),
+                        ),
                       ),
                     ),
                     Expanded(

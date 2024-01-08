@@ -17,6 +17,10 @@ class AppText {
   static const content = TextStyle(
     fontSize: 16,
   );
+  static const contentBold = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
   static const smallContent = TextStyle(
     fontSize: 14,
   );

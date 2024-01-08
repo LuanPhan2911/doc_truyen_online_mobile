@@ -10,21 +10,19 @@ class AuthService {
     return dio().post("/api/register", data: data);
   }
 
-  static Future<Dio.Response> tryToken(token) {
+  static Future<Dio.Response> tryToken() {
     return dio().get(
       "/api/user",
-      options: Dio.Options(
-        headers: {"Authorization": "Bearer $token"},
-      ),
     );
   }
 
-  static Future<Dio.Response> logout(token) {
+  static Future<Dio.Response> logout() {
     return dio().get(
       "/api/logout",
-      options: Dio.Options(
-        headers: {"Authorization": "Bearer $token"},
-      ),
     );
+  }
+
+  static Future<Dio.Response> edit(data) {
+    return dio().post("/api/users/edit", data: data);
   }
 }

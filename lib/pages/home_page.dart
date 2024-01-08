@@ -21,12 +21,14 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        body: ListView(
-          children: const [
-            StoryNewest(),
-            StoryFavorite(),
-            StoryNewCreated(),
-          ],
+        body: const SingleChildScrollView(
+          child: Column(
+            children: [
+              StoryNewest(),
+              StoryFavorite(),
+              StoryNewCreated(),
+            ],
+          ),
         ));
   }
 }

@@ -33,7 +33,6 @@ class AppRoute {
     verifyEmail: (context) => const VerifyEmailPage(),
     forgotPassword: (context) => const ForgotPasswordPage(),
     storySearch: (context) => const StorySearchPage(),
-    storyDetail: (context) => const StoryDetail(),
     chapter: (context) => const ChapterPage(),
     comment: (context) => const Comments(),
   };

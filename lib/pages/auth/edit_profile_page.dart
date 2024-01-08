@@ -1,5 +1,16 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
+import 'package:doc_truyen_online_mobile/data/models/user.dart';
+import 'package:doc_truyen_online_mobile/helpers/helper.dart';
+import 'package:doc_truyen_online_mobile/helpers/toast.dart';
+import 'package:doc_truyen_online_mobile/services/auth_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -9,23 +20,94 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final ImagePicker picker = ImagePicker();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _birtdateController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String? avatar;
+  String defaultAvatar = "assets/black_profile.png";
+  XFile? fileAvatar;
+  String? _fileAvatarPath;
+  late String gender;
+  Map genders = {
+    "male": "0",
+    "female": "1",
+  };
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _nameController.text = "Luan";
-    _birtdateController.text = "2000";
-    _descriptionController.text = "This is a long text";
+    User? user = Provider.of<AuthProvider>(context, listen: false).user;
+    _nameController.text = user!.name;
+    _birthDateController.text = user.birthDate ?? "";
+    _descriptionController.text = user.description ?? "";
+    _emailController.text = user.email;
+    avatar = user.avatar;
+    gender = user.gender;
+  }
+
+  void handleEditUser(context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        Response res = await AuthService.edit(FormData.fromMap({
+          "name": _nameController.text,
+          "description": _descriptionController.text,
+          "gender": gender,
+          "birth_date": _birthDateController.text,
+          "avatar": _fileAvatarPath != null
+              ? await MultipartFile.fromFile(_fileAvatarPath!)
+              : null
+        }));
+        if (res.statusCode == 200) {
+          Helper.logWarning(res.data);
+          Provider.of<AuthProvider>(context, listen: false)
+              .updateProfile(res.data['data']);
+          Toast.success(context, "Cập nhật hồ sơ thành công");
+        }
+      } on DioException catch (e) {
+        Helper.logWarning(e);
+      }
+    }
+  }
+
+  Future<void> getImage(ImageSource source) async {
+    fileAvatar = await picker.pickImage(
+      source: source,
+    );
+    if (fileAvatar != null) {
+      setState(() {
+        _fileAvatarPath = fileAvatar!.path;
+      });
+    } else {
+      await getLostData();
+    }
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
+  }
+
+  Future<void> getLostData() async {
+    final LostDataResponse response = await picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    fileAvatar = response.file;
+
+    if (fileAvatar != null) {
+      setState(() {
+        _fileAvatarPath = fileAvatar!.path;
+      });
+    } else {
+      Helper.logWarning("File not found");
+    }
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _nameController.dispose();
-    _birtdateController.dispose();
+    _birthDateController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
@@ -42,30 +124,89 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Stack(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              "https://imgupscaler.com/images/samples/anime-after.webp",
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                              height: 100,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () async {
+                                          await getImage(ImageSource.camera);
+                                        },
+                                        icon: const Icon(Icons.camera),
+                                      ),
+                                      const Text("Camera")
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () async {
+                                          await getImage(ImageSource.gallery);
+                                        },
+                                        icon: const Icon(Icons.library_add),
+                                      ),
+                                      const Text(
+                                        "Thư viên",
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: ClipOval(
+                              child: _fileAvatarPath != null
+                                  ? Image(
+                                      image: FileImage(File(_fileAvatarPath!)),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : avatar == null
+                                      ? Image.asset(
+                                          defaultAvatar,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          Helper.asset(avatar),
+                                          fit: BoxFit.cover,
+                                          key: ValueKey(
+                                            Random().nextInt(100),
+                                          ),
+                                        ),
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: Icon(
-                            Icons.camera_enhance,
-                          ),
-                        )
-                      ],
+                          const Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Icon(
+                              Icons.camera_enhance,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -86,7 +227,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   height: 16,
                 ),
                 TextFormField(
-                  initialValue: "emaik@gmail",
+                  controller: _emailController,
                   enabled: false,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
@@ -96,14 +237,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   height: 16,
                 ),
                 TextFormField(
-                  controller: _birtdateController,
+                  controller: _birthDateController,
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     hintText: "Năm sinh",
+                    labelText: "Năm sinh",
                     prefixIcon: Icon(Icons.date_range),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Vui lòng điền năm sinh!';
+                      return 'Năm sinh không hợp lệ!';
                     }
                     return null;
                   },
@@ -117,7 +260,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   minLines: 3,
                   decoration: const InputDecoration(
                     hintText: "Giới thiệu ngắn",
+                    labelText: "Giới thiệu ngắn",
                     prefixIcon: Icon(Icons.text_fields),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton(
+                    showSelectedIcon: false,
+                    segments: [
+                      ButtonSegment(
+                        value: genders['male'],
+                        label: const Text("Nam"),
+                        icon: const Icon(Icons.boy),
+                      ),
+                      ButtonSegment(
+                        value: genders['female'],
+                        label: const Text("Nữ"),
+                        icon: const Icon(Icons.girl),
+                      ),
+                    ],
+                    selected: {gender},
+                    onSelectionChanged: (item) {
+                      setState(() {
+                        print(item);
+                        gender = item.first;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(
@@ -127,8 +299,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   width: double.infinity,
                   child: TextButton(
                       style: AppColor.textBtnBlue,
-                      onPressed: () {},
-                      child: Text("Lưu")),
+                      onPressed: () => handleEditUser(context),
+                      child: const Text("Lưu")),
                 )
               ],
             ),

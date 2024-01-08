@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart' as Dio;
-import 'package:doc_truyen_online_mobile/data/models/User.dart';
+import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +12,22 @@ class AuthProvider extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
 
   void login({required String token}) async {
+    await storage.write(key: 'token', value: token);
     try {
-      Dio.Response res = await AuthService.tryToken(token);
+      Dio.Response res = await AuthService.tryToken();
       if (res.statusCode == 200) {
-        await storage.write(key: 'token', value: token);
         user = User.fromJson(res.data['data']);
-        notifyListeners();
         _isAuth = true;
+        notifyListeners();
       }
-    } on Dio.DioException catch (e) {}
+    } on Dio.DioException catch (e) {
+      Helper.logWarning(e);
+    }
+  }
+
+  void updateProfile(json) {
+    user = User.fromJson(json);
+    notifyListeners();
   }
 
   void tryToken() async {
@@ -28,7 +35,7 @@ class AuthProvider extends ChangeNotifier {
     String? token = hasToken ? await storage.read(key: 'token') : null;
     if (token != null) {
       try {
-        Dio.Response res = await AuthService.tryToken(token);
+        Dio.Response res = await AuthService.tryToken();
         if (res.statusCode == 200) {
           user = User.fromJson(res.data['data']);
           _isAuth = true;
@@ -48,7 +55,7 @@ class AuthProvider extends ChangeNotifier {
     String? token = hasToken ? await storage.read(key: 'token') : null;
     if (token != null) {
       try {
-        Dio.Response res = await AuthService.logout(token);
+        Dio.Response res = await AuthService.logout();
         if (res.statusCode == 200) {
           await storage.delete(key: 'token');
           user = null;
