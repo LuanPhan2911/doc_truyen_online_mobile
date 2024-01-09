@@ -11,6 +11,7 @@ class Story {
   String slug;
   String? description;
   String? truncateDescription;
+  String? commentsCount;
   Genre genre;
   List<Genre>? genres;
   Story({
@@ -22,18 +23,20 @@ class Story {
     this.truncateDescription,
     required this.genre,
     this.genres,
+    this.commentsCount,
   });
   factory Story.fromJson(Map<String, dynamic> data) {
     return Story(
-        id: data['id'].toString(),
-        name: data['name'],
-        avatar: data['avatar'],
-        slug: data['slug'],
-        description: data['description'],
-        truncateDescription: data['truncate_description'],
-        genre: Genre.fromJson(data['genre']),
-        genres:
-            List.from(data['genres']).map((e) => Genre.fromJson(e)).toList());
+      id: data['id'].toString(),
+      name: data['name'],
+      avatar: data['avatar'],
+      slug: data['slug'],
+      description: data['description'],
+      truncateDescription: data['truncate_description'],
+      genre: Genre.fromJson(data['genre']),
+      genres: List.from(data['genres']).map((e) => Genre.fromJson(e)).toList(),
+      commentsCount: data['comments_count'].toString(),
+    );
   }
   static void showStoryDetail(context, String slug) {
     Navigator.of(context).push(MaterialPageRoute(

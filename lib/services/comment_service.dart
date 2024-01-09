@@ -10,4 +10,8 @@ class CommentService {
     return dio().get("/api/comments/replies",
         queryParameters: {"comment_id": commentId});
   }
+
+  static Future<Response> postComment(data) {
+    return dio().post("/api/comments/create", data: data);
+  }
 }

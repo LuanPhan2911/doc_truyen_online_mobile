@@ -148,8 +148,9 @@ class _StoryDetailState extends State<StoryDetail> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) {
                                     return Comments(
-                                      storyId: storyDetail.id!,
-                                    );
+                                        storyId: storyDetail.id!,
+                                        commentsCount:
+                                            storyDetail.commentsCount!);
                                   },
                                 ));
                               },

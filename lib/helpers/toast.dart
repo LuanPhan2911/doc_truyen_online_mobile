@@ -28,4 +28,17 @@ class Toast {
       ),
     );
   }
+
+  static warning(context, message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColor.yellow,
+        content: Text(
+          message,
+          style: AppText.subtitle,
+        ),
+      ),
+    );
+  }
 }

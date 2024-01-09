@@ -9,6 +9,7 @@ import 'package:readmore/readmore.dart';
 class CommentContent extends StatefulWidget {
   final Comment comment;
   final bool isChild;
+
   const CommentContent({
     super.key,
     required this.comment,
@@ -20,12 +21,6 @@ class CommentContent extends StatefulWidget {
 }
 
 class _CommentContentState extends State<CommentContent> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     Comment comment = widget.comment;

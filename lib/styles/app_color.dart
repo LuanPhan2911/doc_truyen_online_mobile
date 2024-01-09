@@ -10,6 +10,7 @@ class AppColor {
   static const dart = Colors.black26;
   static const red = Colors.redAccent;
   static const green = Colors.green;
+  static const yellow = Colors.yellow;
 
   static final textBtnBlack = TextButton.styleFrom(
     backgroundColor: black,

@@ -15,6 +15,8 @@ class CommentsChild extends StatefulWidget {
 
 class _CommentsChildState extends State<CommentsChild> {
   late Future<List<Comment>> commentReplies;
+  Comment? newReplies;
+  bool hasNewReplies = false;
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,13 @@ class _CommentsChildState extends State<CommentsChild> {
     return List.from(res.data['data']).map((e) => Comment.fromJson(e)).toList();
   }
 
+  void addNewComment(Comment comment) {
+    setState(() {
+      hasNewReplies = true;
+      newReplies = comment;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +42,11 @@ class _CommentsChildState extends State<CommentsChild> {
         title: const Text("Chi tiết bình luận"),
       ),
       bottomSheet: CommentForm(
+        commentableId: widget.commentParent.commentableId,
+        commentableType: "story",
+        parentId: widget.commentParent.id,
         isChild: true,
+        addComment: addNewComment,
       ),
       body: Container(
         padding: const EdgeInsets.all(8),
@@ -48,6 +61,9 @@ class _CommentsChildState extends State<CommentsChild> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<Comment> comments = snapshot.data!;
+                if (hasNewReplies) {
+                  comments.add(newReplies!);
+                }
                 if (comments.isEmpty) {
                   return const Center(
                     child: Text("Không có trả lời"),
@@ -58,7 +74,9 @@ class _CommentsChildState extends State<CommentsChild> {
                     children: [
                       ...List.generate(comments.length, (index) {
                         return CommentContent(
-                            comment: comments[index], isChild: true);
+                          comment: comments[index],
+                          isChild: true,
+                        );
                       })
                     ],
                   ),

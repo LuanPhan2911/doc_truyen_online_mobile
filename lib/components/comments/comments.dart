@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 
 class Comments extends StatefulWidget {
   final String storyId;
-  const Comments({super.key, required this.storyId});
+  final String commentsCount;
+  const Comments(
+      {super.key, required this.storyId, required this.commentsCount});
 
   @override
   State<Comments> createState() => _CommentsState();
@@ -17,6 +19,8 @@ class Comments extends StatefulWidget {
 
 class _CommentsState extends State<Comments> {
   late Future<List<Comment>> comments;
+  Comment? newComment;
+  bool hasNewComment = false;
   @override
   void initState() {
     super.initState();
@@ -30,18 +34,32 @@ class _CommentsState extends State<Comments> {
         .toList();
   }
 
+  void addNewComment(Comment comment) {
+    setState(() {
+      hasNewComment = true;
+      newComment = comment;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Comment> commentList = snapshot.data!;
+          if (hasNewComment) {
+            commentList.insert(0, newComment!);
+          }
           return Scaffold(
             appBar: AppBar(
-              title: Text("${commentList.length} bình luận"),
+              title: Text("${widget.commentsCount} bình luận"),
               centerTitle: true,
             ),
-            bottomSheet: CommentForm(),
+            bottomSheet: CommentForm(
+              commentableId: widget.storyId,
+              commentableType: "story",
+              addComment: addNewComment,
+            ),
             body: ListView(
               children: [
                 ...List.generate(commentList.length, (index) {
@@ -62,7 +80,11 @@ class _CommentsState extends State<Comments> {
               title: const Text("Bình luận"),
               centerTitle: true,
             ),
-            bottomSheet: CommentForm(),
+            bottomSheet: CommentForm(
+              commentableType: "story",
+              commentableId: widget.storyId,
+              addComment: addNewComment,
+            ),
             body: const Center(
               child: Text(
                 "Truyện chưa có bình luận nào",

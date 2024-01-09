@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         String token = res.data['token'];
         Provider.of<AuthProvider>(context, listen: false).login(token: token);
         Toast.success(context, "Đăng nhập thành công");
-        Navigator.of(context).pushNamed(AppRoute.home);
+        Navigator.of(context).pop();
       } on Dio.DioException catch (e) {
         Toast.error(context, "Email hoặc mật khẩu không đúng");
       }
