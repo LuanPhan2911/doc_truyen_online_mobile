@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
+import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
@@ -10,9 +11,9 @@ import 'package:provider/provider.dart';
 
 class CommentForm extends StatefulWidget {
   final bool isChild;
-  final String commentableId;
+  final int commentableId;
   final String commentableType;
-  final String? parentId;
+  final int? parentId;
   final void Function(Comment) addComment;
   const CommentForm({
     super.key,
@@ -47,13 +48,8 @@ class _CommentFormState extends State<CommentForm> {
   }
 
   void _onFocusComment() {
-    if (focusCreateComment.hasFocus) {
-      bool isAuth = Provider.of<AuthProvider>(context, listen: false).isAuth;
-      if (!isAuth) {
-        focusCreateComment.unfocus();
-        Navigator.of(context).pushNamed(AppRoute.login);
-        Toast.warning(context, "Cần đăng nhập để bình luận!");
-      }
+    if (focusCreateComment.hasFocus && !User.isAuth(context)) {
+      focusCreateComment.unfocus();
     }
   }
 

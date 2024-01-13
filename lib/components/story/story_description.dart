@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class StoryDescription extends StatelessWidget {
   final String description;
-  const StoryDescription({super.key, required this.description});
+  final String chaptersCount;
+  const StoryDescription(
+      {super.key, required this.description, required this.chaptersCount});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +16,10 @@ class StoryDescription extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: AppColor.textBoxBlack,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
+                const Column(
                   children: [
                     Text('15', style: AppText.bigTitle),
                     Text("Chương/Tuần", style: AppText.content),
@@ -25,8 +27,8 @@ class StoryDescription extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text('599', style: AppText.bigTitle),
-                    Text("Chương- Đang ra", style: AppText.content),
+                    Text(chaptersCount, style: AppText.bigTitle),
+                    const Text("Chương- Đang ra", style: AppText.content),
                   ],
                 ),
                 Column(

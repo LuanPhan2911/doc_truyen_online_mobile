@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar_with_story_name.dart';
+import 'package:doc_truyen_online_mobile/components/story/story_title_bar.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
@@ -35,13 +37,7 @@ class _StoryFavoriteState extends State<StoryFavorite> {
     return Card(
       child: Column(
         children: [
-          ListTile(
-            title: const Text("Đề cử", style: AppText.title),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              Navigator.of(context).pushNamed(AppRoute.storySearch);
-            },
-          ),
+          const StoryTitleBar(title: "Đề cử"),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
@@ -61,17 +57,22 @@ class _StoryFavoriteState extends State<StoryFavorite> {
                       itemCount: snapshot.data?.length,
                       itemBuilder: (context, index) {
                         Story story = snapshot.data![index];
-                        return GestureDetector(
-                            onTap: () {
-                              Story.showStoryDetail(context, story.slug);
-                            },
-                            child: StoryAvatarWithStoryName(
-                              story: story,
-                            ));
+                        return StoryAvatarWithStoryName(
+                          story: story,
+                          onTap: () {
+                            Story.showStoryDetail(context, story.slug);
+                          },
+                        );
                       },
                     );
                   }
-                  return const Text("None data");
+                  return NoDataFromServer(
+                    onRefresh: () {
+                      setState(() {
+                        stories = fetchStories();
+                      });
+                    },
+                  );
                 },
               ),
             ),

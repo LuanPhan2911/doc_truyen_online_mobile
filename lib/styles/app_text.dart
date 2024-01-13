@@ -14,6 +14,10 @@ class AppText {
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );
+  static const largeContent = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w300,
+  );
   static const content = TextStyle(
     fontSize: 16,
   );

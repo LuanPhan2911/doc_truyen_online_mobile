@@ -3,6 +3,7 @@ import 'package:doc_truyen_online_mobile/components/comments/comment_content.dar
 import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class CommentsChild extends StatefulWidget {
@@ -20,10 +21,10 @@ class _CommentsChildState extends State<CommentsChild> {
   @override
   void initState() {
     super.initState();
-    commentReplies = fetchCommentReplies(widget.commentParent.id);
+    commentReplies = fetchCommentReplies(widget.commentParent.id!);
   }
 
-  Future<List<Comment>> fetchCommentReplies(String commentId) async {
+  Future<List<Comment>> fetchCommentReplies(int commentId) async {
     Response res = await CommentService.getCommentReplies(commentId);
     return List.from(res.data['data']).map((e) => Comment.fromJson(e)).toList();
   }
@@ -42,7 +43,7 @@ class _CommentsChildState extends State<CommentsChild> {
         title: const Text("Chi tiết bình luận"),
       ),
       bottomSheet: CommentForm(
-        commentableId: widget.commentParent.commentableId,
+        commentableId: widget.commentParent.commentableId!,
         commentableType: "story",
         parentId: widget.commentParent.id,
         isChild: true,
@@ -66,7 +67,10 @@ class _CommentsChildState extends State<CommentsChild> {
                 }
                 if (comments.isEmpty) {
                   return const Center(
-                    child: Text("Không có trả lời"),
+                    child: Text(
+                      "Không có trả lời",
+                      style: AppText.subtitle,
+                    ),
                   );
                 }
                 return Expanded(

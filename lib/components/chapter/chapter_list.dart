@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/components/chapter/chapter_list_detail.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
@@ -72,50 +74,19 @@ class _ChapterListState extends State<ChapterList> {
                     ...List.generate(
                       chapters.length,
                       (index) {
-                        return GestureDetector(
+                        Chapter chapter = chapters[index];
+                        return ChapterListDetail(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
                                 return ChapterPage(
                                   slug: widget.slug,
-                                  index: chapters[index].index,
+                                  index: chapter.index,
                                 );
                               },
                             ));
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${index + 1}",
-                                  style: AppText.subtitle,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        chapters[index].name,
-                                        style: AppText.subtitle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        "${chapters[index].createdAt}",
-                                        style: AppText.content,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          chapter: chapter,
                         );
                       },
                     ),
@@ -128,7 +99,13 @@ class _ChapterListState extends State<ChapterList> {
             ],
           );
         }
-        return const Text('None data');
+        return NoDataFromServer(
+          onRefresh: () {
+            setState(() {
+              chapterList = fetchChapterList(widget.slug);
+            });
+          },
+        );
       },
     );
   }

@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comment_content.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class Comments extends StatefulWidget {
-  final String storyId;
-  final String commentsCount;
+  final int storyId;
+  final int commentsCount;
   const Comments(
       {super.key, required this.storyId, required this.commentsCount});
 
@@ -27,7 +27,7 @@ class _CommentsState extends State<Comments> {
     comments = fetchComments(widget.storyId);
   }
 
-  Future<List<Comment>> fetchComments(String storyId) async {
+  Future<List<Comment>> fetchComments(int storyId) async {
     Response res = await CommentService.getComments(storyId);
     return List.from(res.data['data']['data'])
         .map((e) => Comment.fromJson(e))
@@ -85,10 +85,13 @@ class _CommentsState extends State<Comments> {
               commentableId: widget.storyId,
               addComment: addNewComment,
             ),
-            body: const Center(
-              child: Text(
-                "Truyện chưa có bình luận nào",
-                style: AppText.subtitle,
+            body: Center(
+              child: NoDataFromServer(
+                onRefresh: () {
+                  setState(() {
+                    comments = fetchComments(widget.storyId);
+                  });
+                },
               ),
             ));
       },

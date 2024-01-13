@@ -1,30 +1,33 @@
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
 
 class Comment {
-  String id;
-  String? parentId;
+  int? id;
+  int? parentId;
   String message;
   DateTime createdAt;
   User user;
-  String repliesCount;
-  String commentableId;
-  Comment({
-    required this.id,
-    required this.createdAt,
-    required this.message,
-    this.parentId,
-    required this.repliesCount,
-    required this.user,
-    required this.commentableId,
-  });
+  int? repliesCount;
+  int? commentableId;
+  int likeCount = 0;
+  Comment(
+      {required this.id,
+      required this.createdAt,
+      required this.message,
+      this.parentId,
+      required this.repliesCount,
+      required this.user,
+      required this.commentableId,
+      required this.likeCount});
   factory Comment.fromJson(Map<String, dynamic> data) {
     return Comment(
-      id: data['id'].toString(),
+      id: data['id'],
       createdAt: DateTime.parse(data['created_at']),
       message: data['message'],
-      repliesCount: data['replies_count'].toString(),
+      repliesCount: data['replies_count'],
       user: User.fromJson(data['user']),
-      commentableId: data['commentable_id'].toString(),
+      commentableId: data['commentable_id'],
+      likeCount:
+          data['like_counter'] != null ? data['like_counter']['count'] : 0,
     );
   }
 }

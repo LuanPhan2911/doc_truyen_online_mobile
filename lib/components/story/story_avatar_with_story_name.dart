@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class StoryAvatarWithStoryName extends StatelessWidget {
   final Story story;
-  const StoryAvatarWithStoryName({super.key, required this.story});
+  final VoidCallback? onTap;
+  const StoryAvatarWithStoryName({super.key, required this.story, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,10 @@ class StoryAvatarWithStoryName extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StoryAvatar(avatar: story.avatar),
+          StoryAvatar(
+            avatar: story.avatar!,
+            onTap: onTap,
+          ),
           Text(
             story.name,
             style: AppText.contentBold,
@@ -25,7 +29,7 @@ class StoryAvatarWithStoryName extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            story.genre.name,
+            story.genre!.name!,
             style: AppText.smallContent,
           ),
         ],

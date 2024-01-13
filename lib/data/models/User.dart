@@ -1,10 +1,16 @@
+import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
+import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/helpers/toast.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 class User {
-  String id;
+  int id;
   String name;
   String? email;
   String? avatar;
   String? birthDate;
-  String? gender;
+  int? gender;
   String? description;
 
   User({
@@ -19,13 +25,22 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'].toString(),
+      id: json['id'],
       name: json['name'],
       email: json['email'],
       avatar: json['avatar'],
       birthDate: json['birth_date'],
-      gender: json['gender'].toString(),
+      gender: int.tryParse(json['gender']) ?? 0,
       description: json['description'],
     );
+  }
+
+  static bool isAuth(context) {
+    bool isAuth = Provider.of<AuthProvider>(context, listen: false).isAuth;
+    if (!isAuth) {
+      Navigator.of(context).pushNamed(AppRoute.login);
+      Toast.warning(context, "Cần đăng nhập để thực hiện!");
+    }
+    return isAuth;
   }
 }

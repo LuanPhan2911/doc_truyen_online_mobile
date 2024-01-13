@@ -4,15 +4,20 @@ import 'package:transparent_image/transparent_image.dart';
 
 class StoryAvatar extends StatelessWidget {
   final String avatar;
-  const StoryAvatar({super.key, required this.avatar});
+  final VoidCallback? onTap;
+  const StoryAvatar({super.key, required this.avatar, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: Helper.asset(avatar),
-        ));
+        ),
+      ),
+    );
   }
 }

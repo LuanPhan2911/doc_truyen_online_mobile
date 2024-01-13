@@ -7,6 +7,8 @@ Dio dio() {
   var dio = Dio(
     BaseOptions(
       baseUrl: dotenv.env['APP_BACKEND_URL'] as String,
+      connectTimeout: const Duration(milliseconds: 5000),
+      receiveTimeout: const Duration(milliseconds: 3000),
     ),
   );
   dio.interceptors.add(

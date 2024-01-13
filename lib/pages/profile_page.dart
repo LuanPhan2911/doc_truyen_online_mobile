@@ -6,8 +6,10 @@ import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/edit_profile_page.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -29,35 +31,45 @@ class ProfilePage extends StatelessWidget {
               children: [
                 SizedBox(
                   height: 200,
-                  child: UserAccountsDrawerHeader(
-                    currentAccountPictureSize: const Size(100, 100),
-                    decoration: const BoxDecoration(
-                      color: AppColor.dart,
-                    ),
-                    currentAccountPicture: ClipOval(
-                      child: avatar == null
-                          ? Image.asset(
-                              defaultAvatar,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              Helper.asset(avatar),
-                              fit: BoxFit.cover,
-                              key: ValueKey(
-                                Random().nextInt(100),
-                              ),
-                            ),
-                    ),
-                    accountName: Text(
-                      name,
-                      style: AppText.title,
-                    ),
-                    accountEmail: Text(
-                      email,
-                      style: AppText.content,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: ClipOval(
+                          child: avatar == null
+                              ? Image.asset(
+                                  defaultAvatar,
+                                  fit: BoxFit.cover,
+                                )
+                              : FadeInImage.memoryNetwork(
+                                  placeholder: kTransparentImage,
+                                  image: Helper.asset(avatar),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            name,
+                            style: AppText.title,
+                          ),
+                          Text(
+                            email,
+                            style: AppText.content,
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
+                const Divider(),
                 ListTile(
                   title: const Text("Cập nhật hồ sơ"),
                   trailing: const Icon(Icons.navigate_next),

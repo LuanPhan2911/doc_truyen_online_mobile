@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:doc_truyen_online_mobile/services/app_http.dart';
+import 'package:doc_truyen_online_mobile/configs/app_http.dart';
 
 class StoryService {
   static Future<Response> getStories() {

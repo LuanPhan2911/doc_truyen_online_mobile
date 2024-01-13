@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
+import 'package:doc_truyen_online_mobile/components/story/story_newest_detail.dart';
+import 'package:doc_truyen_online_mobile/components/story/story_title_bar.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
@@ -33,16 +36,7 @@ class _StoryNewestState extends State<StoryNewest> {
     return Card(
       child: Column(
         children: [
-          ListTile(
-            title: const Text(
-              "Mới nhất",
-              style: AppText.title,
-            ),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () {
-              Navigator.of(context).pushNamed(AppRoute.storySearch);
-            },
-          ),
+          const StoryTitleBar(title: "Mới nhất"),
           SizedBox(
             height: 350,
             width: double.infinity,
@@ -65,7 +59,7 @@ class _StoryNewestState extends State<StoryNewest> {
                               width: 60,
                               height: 80,
                               child: StoryAvatar(
-                                avatar: story.avatar,
+                                avatar: story.avatar!,
                               ),
                             );
                           }).toList(),
@@ -74,73 +68,8 @@ class _StoryNewestState extends State<StoryNewest> {
                       body: TabBarView(
                         children: snapshot.data!.map(
                           (e) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(e.genre.name,
-                                            style: AppText.subtitle),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          e.name,
-                                          style: AppText.subtitle,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          e.truncateDescription ?? "",
-                                          style: AppText.content,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Center(
-                                          child: SizedBox(
-                                            width: 150,
-                                            child: TextButton(
-                                              onPressed: () {
-                                                Story.showStoryDetail(
-                                                    context, e.slug);
-                                              },
-                                              style: AppColor.textBtnBlack,
-                                              child: const Text(
-                                                "Đọc",
-                                                style: AppText.subtitle,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Story.showStoryDetail(context, e.slug);
-                                    },
-                                    child: StoryAvatar(
-                                      avatar: e.avatar,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            return StoryNewestDetail(
+                              story: e,
                             );
                           },
                         ).toList(),
@@ -148,7 +77,13 @@ class _StoryNewestState extends State<StoryNewest> {
                     ),
                   );
                 }
-                return Text("None data");
+                return NoDataFromServer(
+                  onRefresh: () {
+                    setState(() {
+                      stories = fetchStories();
+                    });
+                  },
+                );
               },
             ),
           )

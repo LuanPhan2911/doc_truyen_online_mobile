@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_list.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
+import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_description.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_detail_background.dart';
-import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
+import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
@@ -53,10 +53,11 @@ class _StoryDetailState extends State<StoryDetail> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Story storyDetail = snapshot.data!;
+
             return Column(
               children: [
                 StoryDetailBackground(
-                  avatar: storyDetail.avatar,
+                  avatar: storyDetail.avatar!,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -64,7 +65,7 @@ class _StoryDetailState extends State<StoryDetail> {
                         flex: 1,
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          child: StoryAvatar(avatar: storyDetail.avatar),
+                          child: StoryAvatar(avatar: storyDetail.avatar!),
                         ),
                       ),
                       Expanded(
@@ -78,7 +79,7 @@ class _StoryDetailState extends State<StoryDetail> {
                                 padding: const EdgeInsets.all(4),
                                 decoration: AppColor.textBoxBlue,
                                 child: Text(
-                                  storyDetail.genre.name,
+                                  storyDetail.genre!.name!,
                                   style: AppText.subtitle,
                                 ),
                               ),
@@ -99,7 +100,17 @@ class _StoryDetailState extends State<StoryDetail> {
                                   SizedBox(
                                     width: 150,
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) {
+                                            return ChapterPage(
+                                              slug: storyDetail.slug,
+                                              index: storyDetail.chapterIndex!,
+                                            );
+                                          },
+                                        ));
+                                      },
                                       style: AppColor.textBtnBlack,
                                       child: const Text("Đọc"),
                                     ),
@@ -141,7 +152,9 @@ class _StoryDetailState extends State<StoryDetail> {
                       body: TabBarView(
                         children: [
                           StoryDescription(
-                              description: storyDetail.description ?? ""),
+                            description: storyDetail.description ?? "",
+                            chaptersCount: "${storyDetail.chaptersCount ?? 0}",
+                          ),
                           Center(
                             child: TextButton(
                               onPressed: () {
@@ -172,7 +185,7 @@ class _StoryDetailState extends State<StoryDetail> {
               ],
             );
           }
-          return const Text("None data");
+          return const NoDataFromServer();
         },
       ),
     );

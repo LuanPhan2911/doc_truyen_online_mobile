@@ -5,7 +5,7 @@ import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
-import 'package:doc_truyen_online_mobile/services/app_http.dart';
+import 'package:doc_truyen_online_mobile/configs/app_http.dart';
 import 'package:doc_truyen_online_mobile/services/auth_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';

@@ -29,10 +29,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String defaultAvatar = "assets/black_profile.png";
   XFile? fileAvatar;
   String? _fileAvatarPath;
-  late String gender;
+  late int gender;
   Map genders = {
-    "male": "0",
-    "female": "1",
+    "male": 0,
+    "female": 1,
   };
   final _formKey = GlobalKey<FormState>();
   @override
@@ -61,7 +61,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               : null
         }));
         if (res.statusCode == 200) {
-          Helper.logWarning(res.data);
           Provider.of<AuthProvider>(context, listen: false)
               .updateProfile(res.data['data']);
           Toast.success(context, "Cập nhật hồ sơ thành công");
@@ -75,6 +74,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> getImage(ImageSource source) async {
     fileAvatar = await picker.pickImage(
       source: source,
+      maxHeight: 200,
+      maxWidth: 200,
     );
     if (fileAvatar != null) {
       setState(() {
@@ -286,7 +287,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     selected: {gender},
                     onSelectionChanged: (item) {
                       setState(() {
-                        print(item);
                         gender = item.first;
                       });
                     },

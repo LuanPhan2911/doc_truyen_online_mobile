@@ -1,6 +1,6 @@
 class Genre {
-  String id;
-  String name;
+  String? id;
+  String? name;
   String? slug;
   String? type;
   Genre({
@@ -11,10 +11,10 @@ class Genre {
   });
   factory Genre.fromJson(json) {
     return Genre(
-      id: json['id'].toString(),
+      id: json['id']?.toString(),
       name: json['name'],
       slug: json['slug'],
-      type: json['type'].toString(),
+      type: json['type']?.toString(),
     );
   }
 }

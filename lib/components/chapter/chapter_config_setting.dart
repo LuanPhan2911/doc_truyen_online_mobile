@@ -1,4 +1,9 @@
+import 'package:doc_truyen_online_mobile/app/chapter_provider.dart';
+import 'package:doc_truyen_online_mobile/helpers/helper.dart';
+import 'package:doc_truyen_online_mobile/styles/app_color.dart';
+import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChapterConfigSetting extends StatefulWidget {
   const ChapterConfigSetting({super.key});
@@ -11,10 +16,23 @@ enum ReadingMode { flip, scroll }
 
 class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
   ReadingMode readingMode = ReadingMode.flip;
-  int fontSize = 16;
-  Color backgroundColor = Colors.black;
-  static List<String> fonts = ['Arial', 'Times new Roman', 'Verdana'];
-  String font = fonts.first;
+  late double fontSize;
+  late ChapterColor color;
+  late List<ChapterColor> colors;
+  late List<String> fonts;
+  late String font;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fontSize = Provider.of<ChapterProvider>(context, listen: false).fontSize;
+    color = Provider.of<ChapterProvider>(context, listen: false).color;
+    colors = Provider.of<ChapterProvider>(context, listen: false).colors;
+
+    fonts = Provider.of<ChapterProvider>(context, listen: false).fonts;
+    font = Provider.of<ChapterProvider>(context, listen: false).font;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -25,7 +43,7 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
           children: [
             const Text(
               "Chế độ đọc",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: AppText.subtitle,
             ),
             const SizedBox(
               height: 10,
@@ -65,14 +83,19 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
               leading: const Icon(Icons.text_decrease),
               trailing: const Icon(Icons.text_increase),
               title: Slider(
-                value: fontSize.toDouble(),
-                min: 10,
+                value: fontSize,
+                min: 15,
                 max: 30,
-                label: "$fontSize",
+                label: "${fontSize.toInt()}",
+                divisions: 15,
                 onChanged: (value) {
                   setState(() {
-                    fontSize = value.toInt();
+                    fontSize = value;
                   });
+                },
+                onChangeEnd: (value) {
+                  Provider.of<ChapterProvider>(context, listen: false)
+                      .changeFontSize(value);
                 },
               ),
             ),
@@ -86,13 +109,19 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ...List.generate(8, (index) {
-                  return ClipOval(
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
+                ...List.generate(colors.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Provider.of<ChapterProvider>(context, listen: false)
+                          .changeColor(colors[index]);
+                    },
+                    child: ClipOval(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: colors[index].background,
+                        ),
                       ),
                     ),
                   );
@@ -108,13 +137,16 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
             ),
             ...fonts.map((e) {
               return RadioListTile(
+                  activeColor: AppColor.blue,
                   value: e,
                   groupValue: font,
-                  title: Text('$e'),
+                  title: Text(e),
                   onChanged: (value) {
                     setState(() {
                       font = value as String;
                     });
+                    Provider.of<ChapterProvider>(context, listen: false)
+                        .changeFont(e);
                   });
             }).toList(),
           ],
