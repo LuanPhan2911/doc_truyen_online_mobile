@@ -44,7 +44,11 @@ class _StoryNewCreatedState extends State<StoryNewCreated> {
               child: FutureBuilder(
                 future: stories,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasData) {
                     return GridView.builder(
                       scrollDirection: Axis.horizontal,
                       gridDelegate:

@@ -30,7 +30,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   XFile? fileAvatar;
   String? _fileAvatarPath;
   late int gender;
-  Map genders = {
+  Map<String, int> genders = {
     "male": 0,
     "female": 1,
   };
@@ -40,12 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // TODO: implement initState
     super.initState();
     User? user = Provider.of<AuthProvider>(context, listen: false).user;
-    _nameController.text = user!.name;
-    _birthDateController.text = user.birthDate ?? "";
-    _descriptionController.text = user.description ?? "";
-    _emailController.text = user.email!;
-    avatar = user.avatar;
-    gender = user.gender!;
+    setUser(user!);
   }
 
   void handleEditUser(context) async {
@@ -61,14 +56,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
               : null
         }));
         if (res.statusCode == 200) {
-          Provider.of<AuthProvider>(context, listen: false)
-              .updateProfile(res.data['data']);
+          User user = User.fromJson(res.data['data']);
+          Provider.of<AuthProvider>(context, listen: false).updateProfile(user);
+          setUser(user);
           Toast.success(context, "Cập nhật hồ sơ thành công");
         }
       } on DioException catch (e) {
         Helper.logWarning(e);
       }
     }
+  }
+
+  void setUser(User user) {
+    _nameController.text = user.name ?? "";
+    _birthDateController.text = user.birthDate ?? "";
+    _descriptionController.text = user.description ?? "";
+    _emailController.text = user.email!;
+    avatar = user.avatar;
+    gender = user.gender!;
   }
 
   Future<void> getImage(ImageSource source) async {
@@ -287,7 +292,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     selected: {gender},
                     onSelectionChanged: (item) {
                       setState(() {
-                        gender = item.first;
+                        gender = item.first!;
                       });
                     },
                   ),

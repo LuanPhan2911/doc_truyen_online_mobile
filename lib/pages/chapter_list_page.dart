@@ -50,7 +50,11 @@ class _ChapterListPageState extends State<ChapterListPage> {
       body: FutureBuilder(
         future: chapterList,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData) {
             List<Chapter> chapters = snapshot.data!;
             if (isSort) {
               chapters = chapters.reversed.toList();
@@ -94,7 +98,11 @@ class _ChapterListPageState extends State<ChapterListPage> {
             );
           }
           return NoDataFromServer(
-            onRefresh: () {},
+            onRefresh: () {
+              setState(() {
+                chapterList = fetchChapterList(widget.slug);
+              });
+            },
           );
         },
       ),

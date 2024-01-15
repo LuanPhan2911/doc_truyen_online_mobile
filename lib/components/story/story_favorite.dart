@@ -4,11 +4,8 @@ import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar_with_story_name.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_title_bar.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
-import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class StoryFavorite extends StatefulWidget {
@@ -46,7 +43,11 @@ class _StoryFavoriteState extends State<StoryFavorite> {
               child: FutureBuilder(
                 future: stories,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasData) {
                     return GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(

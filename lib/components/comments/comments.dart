@@ -4,7 +4,6 @@ import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
-import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class Comments extends StatefulWidget {
@@ -45,7 +44,11 @@ class _CommentsState extends State<Comments> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData) {
           List<Comment> commentList = snapshot.data!;
           if (hasNewComment) {
             commentList.insert(0, newComment!);

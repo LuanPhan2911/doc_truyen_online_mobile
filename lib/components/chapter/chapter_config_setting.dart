@@ -12,15 +12,13 @@ class ChapterConfigSetting extends StatefulWidget {
   State<ChapterConfigSetting> createState() => _ChapterConfigSettingState();
 }
 
-enum ReadingMode { flip, scroll }
-
 class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
-  ReadingMode readingMode = ReadingMode.flip;
   late double fontSize;
   late ChapterColor color;
   late List<ChapterColor> colors;
   late List<String> fonts;
   late String font;
+  late int readingMode;
   @override
   void initState() {
     // TODO: implement initState
@@ -31,6 +29,8 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
 
     fonts = Provider.of<ChapterProvider>(context, listen: false).fonts;
     font = Provider.of<ChapterProvider>(context, listen: false).font;
+    readingMode =
+        Provider.of<ChapterProvider>(context, listen: false).readingMode;
   }
 
   @override
@@ -41,43 +41,48 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Chế độ đọc",
-              style: AppText.subtitle,
-            ),
-            const SizedBox(
-              height: 10,
+            const ListTile(
+              title: Text(
+                "Chế độ đọc",
+                style: AppText.subtitle,
+              ),
             ),
             SizedBox(
               width: double.infinity,
               child: SegmentedButton(
                 showSelectedIcon: false,
-                segments: const [
+                segments: [
                   ButtonSegment(
-                    value: ReadingMode.flip,
-                    label: Text("Lật trang"),
-                    icon: Icon(Icons.vertical_distribute),
+                    value: ChapterReadingMode.flip,
+                    label: const Text("Lật trang"),
+                    icon: const Icon(Icons.vertical_distribute),
                   ),
                   ButtonSegment(
-                    value: ReadingMode.scroll,
-                    label: Text("Cuộn dọc"),
-                    icon: Icon(Icons.horizontal_distribute),
+                    value: ChapterReadingMode.scroll,
+                    label: const Text("Cuộn dọc"),
+                    icon: const Icon(Icons.horizontal_distribute),
                   ),
                 ],
                 selected: {readingMode},
                 onSelectionChanged: (item) {
                   setState(() {
                     readingMode = item.first;
+                    Provider.of<ChapterProvider>(context, listen: false)
+                        .changeReadingMode(readingMode);
                   });
                 },
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Cỡ chữ",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            const ListTile(
+              title: Text(
+                "Cỡ chữ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              trailing: Tooltip(
+                message: "Thay đổi cỡ chữ chỉ được thực hiện ở chế độ cuộn",
+                triggerMode: TooltipTriggerMode.tap,
+                child: Icon(Icons.question_mark),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.text_decrease),
@@ -88,23 +93,24 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
                 max: 30,
                 label: "${fontSize.toInt()}",
                 divisions: 15,
-                onChanged: (value) {
-                  setState(() {
-                    fontSize = value;
-                  });
-                },
+                onChanged: readingMode == ChapterReadingMode.flip
+                    ? null
+                    : (value) {
+                        setState(() {
+                          fontSize = value;
+                        });
+                      },
                 onChangeEnd: (value) {
                   Provider.of<ChapterProvider>(context, listen: false)
                       .changeFontSize(value);
                 },
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Màu",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            const ListTile(
+              title: Text(
+                "Màu",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -128,12 +134,11 @@ class _ChapterConfigSettingState extends State<ChapterConfigSetting> {
                 })
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Phong chữ",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            const ListTile(
+              title: Text(
+                "Phong chữ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
             ),
             ...fonts.map((e) {
               return RadioListTile(

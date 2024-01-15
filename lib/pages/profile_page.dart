@@ -24,7 +24,7 @@ class ProfilePage extends StatelessWidget {
         builder: (context, value, child) {
           if (value.isAuth) {
             String? avatar = value.user?.avatar;
-            String name = value.user!.name;
+            String name = value.user!.name!;
             String email = value.user?.email ?? "";
             String defaultAvatar = "assets/black_profile.png";
             return ListView(

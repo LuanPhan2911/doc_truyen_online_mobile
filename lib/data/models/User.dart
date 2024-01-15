@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class User {
-  int id;
-  String name;
+  int? id;
+  String? name;
   String? email;
   String? avatar;
   String? birthDate;
@@ -30,7 +30,7 @@ class User {
       email: json['email'],
       avatar: json['avatar'],
       birthDate: json['birth_date'],
-      gender: int.tryParse(json['gender']) ?? 0,
+      gender: json['gender'],
       description: json['description'],
     );
   }

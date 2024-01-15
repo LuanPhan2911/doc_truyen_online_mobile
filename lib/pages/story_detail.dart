@@ -51,7 +51,11 @@ class _StoryDetailState extends State<StoryDetail> {
       body: FutureBuilder(
         future: story,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData) {
             Story storyDetail = snapshot.data!;
 
             return Column(

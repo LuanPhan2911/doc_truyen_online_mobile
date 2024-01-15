@@ -25,8 +25,8 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  void updateProfile(json) {
-    user = User.fromJson(json);
+  void updateProfile(User? user) {
+    this.user = user;
     notifyListeners();
   }
 

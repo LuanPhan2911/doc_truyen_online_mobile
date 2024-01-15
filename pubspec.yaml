@@ -19,6 +19,8 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   transparent_image: ^2.0.1
   intl: ^0.19.0
+  card_swiper: ^3.0.0
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:

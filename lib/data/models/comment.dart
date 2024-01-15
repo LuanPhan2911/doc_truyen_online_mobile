@@ -5,7 +5,7 @@ class Comment {
   int? parentId;
   String message;
   DateTime createdAt;
-  User user;
+  User? user;
   int? repliesCount;
   int? commentableId;
   int likeCount = 0;

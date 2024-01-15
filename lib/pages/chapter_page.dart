@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/app/chapter_provider.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_info.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_setting.dart';
+import 'package:doc_truyen_online_mobile/components/chapter/chapter_view_horizon.dart';
+import 'package:doc_truyen_online_mobile/components/chapter/chapter_view_vertical.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
@@ -66,7 +68,7 @@ class _ChapterPageState extends State<ChapterPage> {
                     chapter: chapter,
                     onReload: () {},
                   ),
-                  ChapterConfigSetting(),
+                  const ChapterConfigSetting(),
                 ],
               ),
             ),
@@ -78,7 +80,7 @@ class _ChapterPageState extends State<ChapterPage> {
 
   int? nextChapterIndex(int? lastChapterIndex) {
     int? index = widget.index;
-    if (index != null && lastChapterIndex != null && index < lastChapterIndex) {
+    if (lastChapterIndex != null && index < lastChapterIndex) {
       index = index + 1;
       return index;
     }
@@ -87,9 +89,7 @@ class _ChapterPageState extends State<ChapterPage> {
 
   int? previousChapterIndex(int? firstChapterIndex) {
     int? index = widget.index;
-    if (index != null &&
-        firstChapterIndex != null &&
-        index > firstChapterIndex) {
+    if (firstChapterIndex != null && index > firstChapterIndex) {
       index = index - 1;
       return index;
     }
@@ -137,16 +137,19 @@ class _ChapterPageState extends State<ChapterPage> {
     return FutureBuilder(
       future: chapterFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData) {
           Chapter chapter = snapshot.data!;
           return Consumer<ChapterProvider>(
             builder: (context, value, child) {
               return Scaffold(
-                extendBody: true,
                 appBar: AppBar(
+                  title: Text(chapter.name),
                   backgroundColor: value.color.background,
                   foregroundColor: value.color.foreground,
-                  title: Text(chapter.name),
                   actions: [
                     IconButton(
                         onPressed: () {
@@ -159,25 +162,17 @@ class _ChapterPageState extends State<ChapterPage> {
                   onTap: () {
                     showChapterConfig(context, chapter: chapter);
                   },
-                  child: SingleChildScrollView(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: value.color.background,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 100,
-                        horizontal: 10,
-                      ),
-                      child: Text(
-                        chapter.content!,
-                        style: TextStyle(
+                  child: ChapterReadingMode.scroll == value.readingMode
+                      ? ChapterViewVertical(
+                          content: chapter.content!,
+                          font: value.font,
+                          foreground: value.color.foreground,
                           fontSize: value.fontSize,
-                          color: value.color.foreground,
-                          fontFamily: value.font,
+                          background: value.color.background,
+                        )
+                      : ChapterViewHorizon(
+                          content: chapter.content!,
                         ),
-                      ),
-                    ),
-                  ),
                 ),
                 floatingActionButton: Row(
                   mainAxisAlignment: MainAxisAlignment.end,

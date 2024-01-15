@@ -56,7 +56,7 @@ class _CommentContentState extends State<CommentContent> {
             child: ClipOval(
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: Helper.asset(comment.user.avatar!),
+                image: Helper.asset(comment.user!.avatar!),
               ),
             ),
           ),
@@ -68,7 +68,7 @@ class _CommentContentState extends State<CommentContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comment.user.name,
+                  comment.user!.name!,
                   style: AppText.subtitle,
                 ),
                 ReadMoreText(

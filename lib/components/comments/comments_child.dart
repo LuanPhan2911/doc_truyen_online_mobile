@@ -60,7 +60,11 @@ class _CommentsChildState extends State<CommentsChild> {
           FutureBuilder(
             future: commentReplies,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasData) {
                 List<Comment> comments = snapshot.data!;
                 if (hasNewReplies) {
                   comments.add(newReplies!);

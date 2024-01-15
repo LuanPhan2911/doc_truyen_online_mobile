@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/data/arguments/story_argument.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -102,14 +101,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
                     Expanded(
                       flex: 1,
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            AppRoute.storyDetail,
-                            arguments: StoryArgument(
-                              slug: "abc",
-                            ),
-                          );
-                        },
+                        onTap: () {},
                         child: Container(
                           width: 100,
                           height: 120,
@@ -135,14 +127,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
                             height: 10,
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                AppRoute.storyDetail,
-                                arguments: StoryArgument(
-                                  slug: "abc",
-                                ),
-                              );
-                            },
+                            onTap: () {},
                             child: Text(
                               "Tên truyện $index",
                               style: AppText.subtitle,
