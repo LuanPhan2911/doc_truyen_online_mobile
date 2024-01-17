@@ -3,6 +3,7 @@ import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 class ChapterConfigSetting extends StatefulWidget {

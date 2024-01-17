@@ -29,7 +29,7 @@ class Story {
     required this.chapterIndex,
     this.chaptersCount,
   });
-  factory Story.fromJson(Map<String, dynamic> data) {
+  factory Story.fromJson(Map data) {
     return Story(
       id: data['id'],
       name: data['name'],

@@ -113,6 +113,7 @@ class _MultiPageTextState extends State<MultiPageText> {
           remainingText.substring(pageProperties.text.length).trimLeft();
       retries = 0;
     }
+
     return pages;
   }
 

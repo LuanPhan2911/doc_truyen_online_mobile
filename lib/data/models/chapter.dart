@@ -16,7 +16,7 @@ class Chapter {
       required this.createdAt,
       this.storyId,
       required this.story});
-  factory Chapter.fromJson(Map<String, dynamic> data) {
+  factory Chapter.fromJson(Map data) {
     return Chapter(
       id: data['id'],
       name: data['name'],

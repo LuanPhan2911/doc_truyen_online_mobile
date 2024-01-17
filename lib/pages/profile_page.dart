@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
@@ -32,26 +33,28 @@ class ProfilePage extends StatelessWidget {
                 SizedBox(
                   height: 200,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: ClipOval(
-                          child: avatar == null
-                              ? Image.asset(
-                                  defaultAvatar,
-                                  fit: BoxFit.cover,
-                                )
-                              : FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
-                                  image: Helper.asset(avatar),
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
+                      ClipOval(
+                        child: avatar == null
+                            ? Image.asset(
+                                defaultAvatar,
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              )
+                            : CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 150,
+                                imageUrl: Helper.asset(avatar),
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,

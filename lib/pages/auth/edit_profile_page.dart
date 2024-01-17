@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
@@ -181,28 +182,34 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       },
                       child: Stack(
                         children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: ClipOval(
-                              child: _fileAvatarPath != null
-                                  ? Image(
-                                      image: FileImage(File(_fileAvatarPath!)),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : avatar == null
-                                      ? Image.asset(
-                                          defaultAvatar,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.network(
-                                          Helper.asset(avatar),
-                                          fit: BoxFit.cover,
-                                          key: ValueKey(
-                                            Random().nextInt(100),
-                                          ),
-                                        ),
-                            ),
+                          ClipOval(
+                            child: _fileAvatarPath != null
+                                ? Image(
+                                    image: FileImage(File(_fileAvatarPath!)),
+                                    fit: BoxFit.cover,
+                                    width: 150,
+                                    height: 150,
+                                  )
+                                : avatar == null
+                                    ? Image.asset(
+                                        defaultAvatar,
+                                        fit: BoxFit.cover,
+                                        width: 150,
+                                        height: 150,
+                                      )
+                                    : CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        width: 150,
+                                        height: 150,
+                                        imageUrl: Helper.asset(avatar),
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                      ),
                           ),
                           const Positioned(
                             bottom: 10,

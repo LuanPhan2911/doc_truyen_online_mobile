@@ -23,7 +23,7 @@ class User {
     required this.description,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map json) {
     return User(
       id: json['id'],
       name: json['name'],
@@ -33,6 +33,17 @@ class User {
       gender: json['gender'],
       description: json['description'],
     );
+  }
+  Map toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'avatar': avatar,
+      'birth_date': birthDate,
+      'gender': gender,
+      'description': description
+    };
   }
 
   static bool isAuth(context) {

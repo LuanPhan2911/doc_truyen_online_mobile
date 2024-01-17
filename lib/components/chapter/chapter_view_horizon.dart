@@ -1,6 +1,7 @@
 import 'package:doc_truyen_online_mobile/app/chapter_provider.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/multi_page_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 

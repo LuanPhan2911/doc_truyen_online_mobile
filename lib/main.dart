@@ -5,6 +5,7 @@ import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_them.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -46,6 +47,7 @@ class _MainAppState extends State<MainApp> {
       initialRoute: AppRoute.home,
       routes: AppRoute.routes,
       debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
     );
   }
 }

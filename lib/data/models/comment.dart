@@ -18,7 +18,7 @@ class Comment {
       required this.user,
       required this.commentableId,
       required this.likeCount});
-  factory Comment.fromJson(Map<String, dynamic> data) {
+  factory Comment.fromJson(Map data) {
     return Comment(
       id: data['id'],
       createdAt: DateTime.parse(data['created_at']),
@@ -29,5 +29,17 @@ class Comment {
       likeCount:
           data['like_counter'] != null ? data['like_counter']['count'] : 0,
     );
+  }
+  Map toMap() {
+    return {
+      "id": id,
+      "parentId": parentId,
+      "message": message,
+      "created_at": createdAt.toString(),
+      "replies_count": repliesCount,
+      "user": user?.toMap(),
+      "commentable_id": commentableId,
+      "like_counter": {'count': likeCount}
+    };
   }
 }

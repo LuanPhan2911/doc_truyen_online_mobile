@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comments_child.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
@@ -8,7 +9,6 @@ import 'package:doc_truyen_online_mobile/services/comment_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class CommentContent extends StatefulWidget {
   final Comment comment;
@@ -33,7 +33,6 @@ class _CommentContentState extends State<CommentContent> {
         String action = res.data['data']['action'];
         if (action == 'like') {
           likeCount++;
-          ;
         } else {
           likeCount--;
         }
@@ -50,14 +49,15 @@ class _CommentContentState extends State<CommentContent> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: ClipOval(
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: Helper.asset(comment.user!.avatar!),
-              ),
+          ClipOval(
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              width: 50,
+              height: 50,
+              imageUrl: Helper.asset(comment.user!.avatar!),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           const SizedBox(
