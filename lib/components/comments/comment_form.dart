@@ -1,27 +1,25 @@
 import 'package:dio/dio.dart';
-import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
-import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CommentForm extends StatefulWidget {
   final bool isChild;
   final int commentableId;
   final String commentableType;
   final int? parentId;
-  final void Function(Comment) addComment;
+  final void Function(Comment?)? addComment;
   const CommentForm({
     super.key,
     this.isChild = false,
     required this.commentableId,
     required this.commentableType,
     this.parentId,
-    required this.addComment,
+    this.addComment,
   });
 
   @override
@@ -63,14 +61,13 @@ class _CommentFormState extends State<CommentForm> {
         "parent_id": widget.parentId
       });
       if (res.statusCode == 200) {
-        Comment newComment = Comment.fromJson(res.data['data']);
-        widget.addComment(newComment);
+        Comment? newComment = Comment.fromJson(res.data['data']);
+        widget.addComment!(newComment);
 
         commentMessageController.clear();
         // ignore: use_build_context_synchronously
         FocusScope.of(context).unfocus();
         // ignore: use_build_context_synchronously
-        Toast.success(context, "Bình luận thành công");
       }
     } catch (e) {}
   }

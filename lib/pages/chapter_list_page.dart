@@ -6,6 +6,7 @@ import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/services/chapter_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChapterListPage extends StatefulWidget {
   final String slug;
@@ -67,34 +68,26 @@ class _ChapterListPageState extends State<ChapterListPage> {
                 ),
               );
             }
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      ...chapters
-                          .map((chapter) => ChapterListDetail(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                  builder: (context) {
-                                    return ChapterPage(
-                                      slug: widget.slug,
-                                      index: chapter.index,
-                                    );
-                                  },
-                                ));
-                              },
-                              chapter: chapter,
-                              index: widget.index))
-                          .toList(),
-                      const SizedBox(
-                        height: 100,
-                      )
-                    ],
-                  ),
-                ),
-              ],
+            return ScrollablePositionedList.builder(
+              itemCount: chapters.length,
+              initialScrollIndex: chapters
+                  .indexWhere((element) => element.index == widget.index),
+              itemBuilder: (context, index) {
+                return ChapterListDetail(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) {
+                        return ChapterPage(
+                          slug: widget.slug,
+                          index: chapters[index].index,
+                        );
+                      },
+                    ));
+                  },
+                  chapter: chapters[index],
+                  index: widget.index,
+                );
+              },
             );
           }
           return NoDataFromServer(

@@ -7,6 +7,8 @@ import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_description.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_detail_background.dart';
+import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
+import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
@@ -105,15 +107,11 @@ class _StoryDetailState extends State<StoryDetail> {
                                     width: 150,
                                     child: TextButton(
                                       onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return ChapterPage(
-                                              slug: storyDetail.slug,
-                                              index: storyDetail.chapterIndex!,
-                                            );
-                                          },
-                                        ));
+                                        Chapter.showChapter(
+                                          context,
+                                          slug: storyDetail.slug,
+                                          index: storyDetail.chapterIndex,
+                                        );
                                       },
                                       style: AppColor.textBtnBlack,
                                       child: const Text("Đọc"),
@@ -162,18 +160,15 @@ class _StoryDetailState extends State<StoryDetail> {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) {
-                                    return Comments(
-                                        storyId: storyDetail.id!,
-                                        commentsCount:
-                                            storyDetail.commentsCount!);
-                                  },
-                                ));
+                                Comment.showComments(
+                                  context,
+                                  storyId: storyDetail.id!,
+                                  commentCount: storyDetail.commentsCount!,
+                                );
                               },
                               style: AppColor.textBtnBlue,
                               child: const Text(
-                                "Nhấn vào đây để bình luận",
+                                "Xem bình luận",
                                 style: AppText.subtitle,
                               ),
                             ),

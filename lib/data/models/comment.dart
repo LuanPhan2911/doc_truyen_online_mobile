@@ -1,4 +1,7 @@
+import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
+import 'package:doc_truyen_online_mobile/components/comments/comments_child.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
+import 'package:flutter/material.dart';
 
 class Comment {
   int? id;
@@ -41,5 +44,24 @@ class Comment {
       "commentable_id": commentableId,
       "like_counter": {'count': likeCount}
     };
+  }
+
+  static void showComments(context,
+      {required int storyId, required int commentCount}) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return Comments(storyId: storyId, commentsCount: commentCount);
+      },
+    ));
+  }
+
+  static void showReplies(context, {required Comment commentParent}) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return CommentsChild(
+          commentParent: commentParent,
+        );
+      },
+    ));
   }
 }

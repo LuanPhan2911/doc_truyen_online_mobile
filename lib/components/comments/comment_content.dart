@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:doc_truyen_online_mobile/components/comments/comments_child.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/format_date.dart';
@@ -116,14 +115,8 @@ class _CommentContentState extends State<CommentContent> {
                                     ),
                                     leading: const Icon(Icons.comment),
                                     onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) {
-                                          return CommentsChild(
-                                            commentParent: comment,
-                                          );
-                                        },
-                                      ));
+                                      Comment.showReplies(context,
+                                          commentParent: comment);
                                     },
                                   ),
                                 )

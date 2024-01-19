@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comment_content.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comment_form.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
+import 'package:doc_truyen_online_mobile/data/utils/paginator_cursor.dart';
 import 'package:doc_truyen_online_mobile/services/comment_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CommentsChild extends StatefulWidget {
   final Comment commentParent;
@@ -16,24 +18,30 @@ class CommentsChild extends StatefulWidget {
 
 class _CommentsChildState extends State<CommentsChild> {
   late Future<List<Comment>> commentReplies;
-  Comment? newReplies;
-  bool hasNewReplies = false;
+  final _pagingController =
+      PagingController<String?, Comment>(firstPageKey: null);
   @override
   void initState() {
     super.initState();
-    commentReplies = fetchCommentReplies(widget.commentParent.id!);
-  }
-
-  Future<List<Comment>> fetchCommentReplies(int commentId) async {
-    Response res = await CommentService.getCommentReplies(commentId);
-    return List.from(res.data['data']).map((e) => Comment.fromJson(e)).toList();
-  }
-
-  void addNewComment(Comment comment) {
-    setState(() {
-      hasNewReplies = true;
-      newReplies = comment;
+    _pagingController.addPageRequestListener((cursor) {
+      fetchCommentReplies(cursor, widget.commentParent.id!);
     });
+  }
+
+  Future<void> fetchCommentReplies(String? cursor, int commentId) async {
+    try {
+      Response res = await CommentService.getCommentReplies(commentId);
+      var repliesPaginate = PaginatorCursor<Comment>.fromJson(
+          res.data['data'], (t) => Comment.fromJson(t));
+      if (repliesPaginate.isLastPage()) {
+        _pagingController.appendLastPage(repliesPaginate.data);
+      } else {
+        _pagingController.appendPage(
+            repliesPaginate.data, repliesPaginate.nextCursor);
+      }
+    } catch (e) {
+      _pagingController.error = e;
+    }
   }
 
   @override
@@ -47,53 +55,54 @@ class _CommentsChildState extends State<CommentsChild> {
         commentableType: "story",
         parentId: widget.commentParent.id,
         isChild: true,
-        addComment: addNewComment,
+        addComment: (newReply) {
+          if (newReply != null) {
+            _pagingController.refresh();
+          }
+        },
       ),
-      body: Container(
-        padding: const EdgeInsets.all(8),
-        child: Column(children: [
+      body: Column(
+        children: [
           CommentContent(
             isChild: true,
             comment: widget.commentParent,
           ),
           const Divider(),
-          FutureBuilder(
-            future: commentReplies,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasData) {
-                List<Comment> comments = snapshot.data!;
-                if (hasNewReplies) {
-                  comments.add(newReplies!);
-                }
-                if (comments.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      "Không có trả lời",
-                      style: AppText.subtitle,
-                    ),
-                  );
-                }
-                return Expanded(
-                  child: ListView(
-                    children: [
-                      ...List.generate(comments.length, (index) {
-                        return CommentContent(
-                          comment: comments[index],
-                          isChild: true,
-                        );
-                      })
-                    ],
-                  ),
-                );
-              }
-              return const Text("None data");
-            },
-          )
-        ]),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => Future.sync(
+                () => _pagingController.refresh(),
+              ),
+              child: PagedListView.separated(
+                builderDelegate: PagedChildBuilderDelegate<Comment>(
+                  itemBuilder: (context, item, index) {
+                    return CommentContent(
+                      comment: item,
+                      isChild: true,
+                    );
+                  },
+                  noItemsFoundIndicatorBuilder: (context) {
+                    return const Center(
+                      child: Text(
+                        "Chưa có trả lời nào",
+                        style: AppText.title,
+                      ),
+                    );
+                  },
+                ),
+
+                // 4
+                pagingController: _pagingController,
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 16,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+        ],
       ),
     );
   }

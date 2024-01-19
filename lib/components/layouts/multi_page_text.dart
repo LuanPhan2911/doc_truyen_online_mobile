@@ -113,7 +113,6 @@ class _MultiPageTextState extends State<MultiPageText> {
           remainingText.substring(pageProperties.text.length).trimLeft();
       retries = 0;
     }
-
     return pages;
   }
 
@@ -242,63 +241,27 @@ class _MultiPageTextState extends State<MultiPageText> {
 
   @override
   Widget build(BuildContext context) {
-    // String? swipeDirection;
-    // final pageTextContainer = GestureDetector(
-    //   onPanUpdate: (details) {
-    //     swipeDirection = details.delta.dx < 0 ? 'left' : 'right';
-    //   },
-    //   onPanEnd: (details) {
-    //     if (swipeDirection == null) {
-    //       return;
-    //     }
-    //     if (swipeDirection == 'left' && _currentPageIndex < _pages.length - 1) {
-    //       _updatePageIndex(PageUpdateOperation.next);
-
-    //       //handle swipe left event
-    //     }
-    //     if (swipeDirection == 'right' && _currentPageIndex > 0) {
-    //       _updatePageIndex(PageUpdateOperation.previous);
-    //       //handle swipe right event
-    //     }
-
-    //     // Swiping in right direction.
-    //   },
-    //   child: PageTextContainer(
-    //     text: _pages[_currentPageIndex],
-    //     textStyle: widget.textStyle,
-    //     padding: widget.paddingTextBox,
-    //     size: _availableSize,
-    //     decoration: widget.decoration,
-    //   ),
-    // );
-    // return widget.usePageNavigation
-    //     ? Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         children: [
-    //           pageTextContainer,
-    //           PageNavigatorMenu(
-    //             size: Size(widget.size.width, _pageNavigatorHeight),
-    //             currentPageIndex: _currentPageIndex,
-    //             pageCount: _pages.length,
-    //             updatePageIndex: _updatePageIndex,
-    //           ),
-    //         ],
-    //       )
-    //     : pageTextContainer;
-    return Swiper(
-      itemCount: _pages.length,
-      itemBuilder: (context, index) {
-        return PageTextContainer(
-          text: _pages[_currentPageIndex],
-          textStyle: widget.textStyle,
-          padding: widget.paddingTextBox,
-          size: _availableSize,
-          decoration: widget.decoration,
-        );
-      },
-      scrollDirection: Axis.horizontal,
-      loop: false,
+    final pageTextContainer = PageTextContainer(
+      text: _pages[_currentPageIndex],
+      textStyle: widget.textStyle,
+      padding: widget.paddingTextBox,
+      size: _availableSize,
+      decoration: widget.decoration,
     );
+    return widget.usePageNavigation
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              pageTextContainer,
+              PageNavigatorMenu(
+                size: Size(widget.size.width, _pageNavigatorHeight),
+                currentPageIndex: _currentPageIndex,
+                pageCount: _pages.length,
+                updatePageIndex: _updatePageIndex,
+              ),
+            ],
+          )
+        : pageTextContainer;
   }
 }
 

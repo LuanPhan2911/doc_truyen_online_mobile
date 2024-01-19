@@ -1,6 +1,7 @@
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
+import 'package:doc_truyen_online_mobile/pages/auth/edit_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,5 +54,13 @@ class User {
       Toast.warning(context, "Cần đăng nhập để thực hiện!");
     }
     return isAuth;
+  }
+
+  static void editProfile(context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return const EditProfilePage();
+      },
+    ));
   }
 }

@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:doc_truyen_online_mobile/data/models/comment.dart';
-
-class PaginatorCursor {
-  List data;
+class PaginatorCursor<T> {
+  List<T> data;
   String? nextCursor;
   String? prevCursor;
   int perPage;
@@ -14,12 +10,15 @@ class PaginatorCursor {
     required this.prevCursor,
     required this.perPage,
   });
-  factory PaginatorCursor.fromJson(data) {
-    return PaginatorCursor(
-      data: List.from(data['data']).map((e) => e).toList(),
+  factory PaginatorCursor.fromJson(data, T Function(dynamic t) cast) {
+    return PaginatorCursor<T>(
+      data: List.from(data['data']).map((e) => cast(e)).toList(),
       nextCursor: data['next_cursor'],
       prevCursor: data['prev_cursor'],
       perPage: data['per_page'],
     );
+  }
+  bool isLastPage() {
+    return this.nextCursor == null;
   }
 }

@@ -35,47 +35,41 @@ class _StoryFavoriteState extends State<StoryFavorite> {
       child: Column(
         children: [
           const StoryTitleBar(title: "Đề cử"),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 600,
-              child: FutureBuilder(
-                future: stories,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisExtent: 300,
-                      ),
-                      primary: false,
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        Story story = snapshot.data![index];
-                        return StoryAvatarWithStoryName(
-                          story: story,
-                          onTap: () {
-                            Story.showStoryDetail(context, story.slug);
-                          },
-                        );
-                      },
-                    );
-                  }
-                  return NoDataFromServer(
-                    onRefresh: () {
-                      setState(() {
-                        stories = fetchStories();
-                      });
+          SizedBox(
+            height: 600,
+            child: FutureBuilder(
+              future: stories,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasData) {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, mainAxisExtent: 300),
+                    primary: false,
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      Story story = snapshot.data![index];
+                      return StoryAvatarWithStoryName(
+                        story: story,
+                        onTap: () {
+                          Story.showStoryDetail(context, story.slug);
+                        },
+                      );
                     },
                   );
-                },
-              ),
+                }
+                return NoDataFromServer(
+                  onRefresh: () {
+                    setState(() {
+                      stories = fetchStories();
+                    });
+                  },
+                );
+              },
             ),
           )
         ],

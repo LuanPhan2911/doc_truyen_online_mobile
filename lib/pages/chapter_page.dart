@@ -1,20 +1,16 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/app/chapter_provider.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_info.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_config_setting.dart';
-import 'package:doc_truyen_online_mobile/components/chapter/chapter_view_horizon.dart';
-import 'package:doc_truyen_online_mobile/components/chapter/chapter_view_vertical.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
 import 'package:doc_truyen_online_mobile/services/chapter_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChapterPage extends StatefulWidget {
   final String slug;
@@ -162,17 +158,27 @@ class _ChapterPageState extends State<ChapterPage> {
                   onTap: () {
                     showChapterConfig(context, chapter: chapter);
                   },
-                  child: ChapterReadingMode.scroll == value.readingMode
-                      ? ChapterViewVertical(
-                          content: chapter.content!,
-                          font: value.font,
-                          foreground: value.color.foreground,
-                          fontSize: value.fontSize,
-                          background: value.color.background,
-                        )
-                      : ChapterViewHorizon(
-                          content: chapter.content!,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: value.color.background,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 50,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        chapter.content!,
+                        style: GoogleFonts.getFont(
+                          value.font,
+                          textStyle: TextStyle(
+                            color: value.color.foreground,
+                            fontSize: value.fontSize,
+                          ),
                         ),
+                      ),
+                    ),
+                  ),
                 ),
                 floatingActionButton: Row(
                   mainAxisAlignment: MainAxisAlignment.end,

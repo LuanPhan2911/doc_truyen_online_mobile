@@ -81,14 +81,8 @@ class _ChapterListState extends State<ChapterList> {
                         Chapter chapter = chapters[index];
                         return ChapterListDetail(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) {
-                                return ChapterPage(
-                                  slug: widget.slug,
-                                  index: chapter.index,
-                                );
-                              },
-                            ));
+                            Chapter.showChapter(context,
+                                slug: widget.slug, index: chapter.index);
                           },
                           chapter: chapter,
                         );

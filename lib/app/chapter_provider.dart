@@ -1,22 +1,8 @@
+import 'package:doc_truyen_online_mobile/data/utils/chapter_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:flutter/material.dart';
 
-class ChapterColor {
-  Color background;
-  Color foreground;
-  ChapterColor({
-    required this.background,
-    required this.foreground,
-  });
-}
-
-class ChapterReadingMode {
-  static int flip = 1;
-  static int scroll = 2;
-}
-
 class ChapterProvider extends ChangeNotifier {
-  double fontSize = 18;
   List<ChapterColor> colors = [
     ChapterColor(
       background: const Color.fromARGB(255, 52, 52, 50),
@@ -40,11 +26,6 @@ class ChapterProvider extends ChangeNotifier {
     ),
   ];
 
-  ChapterColor color = ChapterColor(
-    background: AppColor.black,
-    foreground: AppColor.white,
-  );
-
   List<String> fonts = [
     'Roboto',
     'Lato',
@@ -53,12 +34,13 @@ class ChapterProvider extends ChangeNotifier {
     'Oswald',
     'Raleway'
   ];
+
   String font = 'Roboto';
-
-  int readingModeScroll = ChapterReadingMode.scroll;
-  int readingModeFlip = ChapterReadingMode.flip;
-
-  int readingMode = ChapterReadingMode.scroll;
+  double fontSize = 18;
+  ChapterColor color = ChapterColor(
+    background: AppColor.black,
+    foreground: AppColor.white,
+  );
   void changeFontSize(fontSize) {
     this.fontSize = fontSize;
     notifyListeners();
@@ -71,11 +53,6 @@ class ChapterProvider extends ChangeNotifier {
 
   void changeFont(String font) {
     this.font = font;
-    notifyListeners();
-  }
-
-  void changeReadingMode(int readingMode) {
-    this.readingMode = readingMode;
     notifyListeners();
   }
 }

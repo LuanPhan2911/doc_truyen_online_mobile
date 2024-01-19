@@ -36,48 +36,42 @@ class _StoryNewCreatedState extends State<StoryNewCreated> {
       child: Column(
         children: [
           const StoryTitleBar(title: "Mới đăng"),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 250,
-              child: FutureBuilder(
-                future: stories,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasData) {
-                    return GridView.builder(
-                      scrollDirection: Axis.horizontal,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        mainAxisExtent: 100,
-                      ),
-                      primary: false,
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        Story story = snapshot.data![index];
-                        return StoryAvatarWithStoryName(
+          SizedBox(
+            height: 250,
+            child: FutureBuilder(
+              future: stories,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      Story story = snapshot.data![index];
+                      return SizedBox(
+                        height: 150,
+                        width: 120,
+                        child: StoryAvatarWithStoryName(
                           story: story,
                           onTap: () {
                             Story.showStoryDetail(context, story.slug);
                           },
-                        );
-                      },
-                    );
-                  }
-                  return NoDataFromServer(
-                    onRefresh: () {
-                      setState(() {
-                        stories = fetchStories();
-                      });
+                        ),
+                      );
                     },
                   );
-                },
-              ),
+                }
+                return NoDataFromServer(
+                  onRefresh: () {
+                    setState(() {
+                      stories = fetchStories();
+                    });
+                  },
+                );
+              },
             ),
           )
         ],

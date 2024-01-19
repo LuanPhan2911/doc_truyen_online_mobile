@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:doc_truyen_online_mobile/data/models/genre.dart';
+import 'package:doc_truyen_online_mobile/data/models/story_user.dart';
 import 'package:doc_truyen_online_mobile/pages/story_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class Story {
   Genre? genre;
   int chapterIndex;
   List<Genre>? genres;
+  StoryUser? storyUser;
   Story({
     this.id,
     required this.name,
@@ -28,6 +30,7 @@ class Story {
     this.commentsCount,
     required this.chapterIndex,
     this.chaptersCount,
+    this.storyUser,
   });
   factory Story.fromJson(Map data) {
     return Story(
@@ -44,6 +47,9 @@ class Story {
       commentsCount: data['comments_count'],
       chapterIndex: data['chapter_index'] ?? 1,
       chaptersCount: data['chapters_count'],
+      storyUser: data['story_user'] != null
+          ? StoryUser.fromJson(data['story_user'])
+          : null,
     );
   }
   static void showStoryDetail(context, String slug) {

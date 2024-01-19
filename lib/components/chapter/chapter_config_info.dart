@@ -1,6 +1,7 @@
-import 'package:doc_truyen_online_mobile/components/chapter/chapter_list.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
+import 'package:doc_truyen_online_mobile/data/models/comment.dart';
+import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_list_page.dart';
 import 'package:doc_truyen_online_mobile/pages/story_detail.dart';
 import 'package:flutter/material.dart';
@@ -31,47 +32,22 @@ class ChapterConfigInfo extends StatelessWidget {
           title: const Text("Danh sách chương"),
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) {
-                  return ChapterListPage(
-                    slug: slug,
-                    index: index,
-                  );
-                },
-              ),
-            );
+            Chapter.showChapterList(context, slug: slug, index: index);
           },
           leading: const Icon(Icons.menu),
         ),
         ListTile(
           title: const Text("Thông tin truyện"),
           onTap: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) {
-                  return StoryDetail(
-                    slug: slug,
-                  );
-                },
-              ),
-            );
+            Story.showStoryDetail(context, slug);
           },
           leading: const Icon(Icons.book),
         ),
         ListTile(
           title: Text("Bình luận ($commentsCount)"),
           onTap: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) {
-                  return Comments(
-                    storyId: storyId,
-                    commentsCount: commentsCount,
-                  );
-                },
-              ),
-            );
+            Comment.showComments(context,
+                storyId: storyId, commentCount: commentsCount);
           },
           leading: const Icon(Icons.comment),
         ),

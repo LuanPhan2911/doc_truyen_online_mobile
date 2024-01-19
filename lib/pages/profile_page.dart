@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/edit_profile_page.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
@@ -77,11 +78,7 @@ class ProfilePage extends StatelessWidget {
                   title: const Text("Cập nhật hồ sơ"),
                   trailing: const Icon(Icons.navigate_next),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return const EditProfilePage();
-                      },
-                    ));
+                    User.editProfile(context);
                   },
                 ),
                 ListTile(

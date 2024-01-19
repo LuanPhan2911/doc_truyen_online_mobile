@@ -3,11 +3,8 @@ import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_newest_detail.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_title_bar.dart';
-import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
-import 'package:doc_truyen_online_mobile/styles/app_color.dart';
-import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 
 class StoryNewest extends StatefulWidget {
@@ -39,7 +36,6 @@ class _StoryNewestState extends State<StoryNewest> {
           const StoryTitleBar(title: "Mới nhất"),
           SizedBox(
             height: 350,
-            width: double.infinity,
             child: FutureBuilder(
               future: stories,
               builder: (context, snapshot) {
@@ -58,8 +54,7 @@ class _StoryNewestState extends State<StoryNewest> {
                           labelPadding: const EdgeInsets.all(5),
                           tabs: List.generate(snapshot.data!.length, (index) {
                             Story story = snapshot.data![index];
-                            return Container(
-                              padding: EdgeInsets.zero,
+                            return SizedBox(
                               width: 60,
                               height: 80,
                               child: StoryAvatar(
