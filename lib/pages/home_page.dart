@@ -48,14 +48,12 @@ class _HomePageState extends State<HomePage> {
                 icon: const Icon(Icons.filter_alt))
           ],
         ),
-        body: const SingleChildScrollView(
-          child: Column(
-            children: [
-              StoryNewest(),
-              StoryFavorite(),
-              StoryNewCreated(),
-            ],
-          ),
+        body: ListView(
+          children: const [
+            StoryNewest(),
+            StoryFavorite(),
+            StoryNewCreated(),
+          ],
         ));
   }
 }

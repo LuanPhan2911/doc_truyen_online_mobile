@@ -4,6 +4,8 @@ import 'package:doc_truyen_online_mobile/components/story/filter_page/story_filt
 import 'package:doc_truyen_online_mobile/components/story/filter_page/story_search_item.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/data/utils/paginator.dart';
+import 'package:doc_truyen_online_mobile/data/utils/story_filter_value.dart';
+import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
@@ -27,6 +29,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
   final _pagingController = PagingController<int, Story>(firstPageKey: 1);
   late String? sortBy;
   late int? view;
+  late int? category;
   @override
   void initState() {
     // TODO: implement initState
@@ -34,8 +37,9 @@ class _StorySearchPageState extends State<StorySearchPage> {
 
     var storyFilterProvider =
         Provider.of<StoryFilterProvider>(context, listen: false);
-    view = storyFilterProvider.getSelected(storyFilterProvider.viewList);
-    sortBy = storyFilterProvider.getSelected(storyFilterProvider.sorByList);
+    view = storyFilterProvider.getFilterSelected(StoryFilterValue.view);
+    sortBy = storyFilterProvider.getFilterSelected(StoryFilterValue.sort);
+    category = storyFilterProvider.getFilterSelected(StoryFilterValue.category);
 
     _pagingController.addPageRequestListener((pageKey) {
       fetchStory(pageKey);
@@ -56,6 +60,11 @@ class _StorySearchPageState extends State<StorySearchPage> {
           "view": view,
         });
       }
+      if (category != null) {
+        // query.addAll({
+        //   "genres_id": [category]
+        // });
+      }
       Response res = await StoryService.getStories(query);
       var storyPaginate =
           Paginator<Story>.fromJson(res.data['data'], (t) => Story.fromJson(t));
@@ -68,6 +77,7 @@ class _StorySearchPageState extends State<StorySearchPage> {
       }
     } catch (e) {
       _pagingController.error = e;
+      Helper.logWarning(e);
     }
   }
 
@@ -91,16 +101,27 @@ class _StorySearchPageState extends State<StorySearchPage> {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return StoryFilter(
-                        setSorBy: (sortBy) {
-                          this.sortBy = sortBy;
-                          _pagingController.refresh();
-                        },
-                        setView: (view) {
-                          this.view = view;
-                          _pagingController.refresh();
-                        },
-                      );
+                      return StoryFilter(setSelected: (value, type) {
+                        switch (type) {
+                          case StoryFilterValue.view:
+                            view = value;
+                            break;
+                          case StoryFilterValue.sort:
+                            sortBy = value;
+                            break;
+                          case StoryFilterValue.character:
+                            break;
+                          case StoryFilterValue.category:
+                            category = value;
+                            break;
+                          case StoryFilterValue.world:
+                            break;
+                          case StoryFilterValue.tag:
+                            break;
+                          default:
+                        }
+                        _pagingController.refresh();
+                      });
                     },
                   );
                 },

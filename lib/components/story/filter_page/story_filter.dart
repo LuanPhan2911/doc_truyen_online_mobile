@@ -1,15 +1,15 @@
 import 'package:doc_truyen_online_mobile/app/story_filter_provider.dart';
+import 'package:doc_truyen_online_mobile/components/story/filter_page/story_filter_item.dart';
+import 'package:doc_truyen_online_mobile/data/utils/story_filter_value.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StoryFilter extends StatefulWidget {
-  final Function(String? sortBy)? setSorBy;
-  final Function(int? view)? setView;
+  final void Function(dynamic value, int type) setSelected;
   const StoryFilter({
     super.key,
-    this.setSorBy,
-    this.setView,
+    required this.setSelected,
   });
 
   @override
@@ -20,83 +20,68 @@ class _StoryFilterState extends State<StoryFilter> {
   @override
   void initState() {
     super.initState();
+    Provider.of<StoryFilterProvider>(context, listen: false).getGenres();
   }
 
   @override
   Widget build(BuildContext context) {
-    var storyFilterProvider =
-        Provider.of<StoryFilterProvider>(context, listen: false);
-    return SingleChildScrollView(
-      child: Consumer<StoryFilterProvider>(
-        builder: (context, value, child) {
-          var sorByList = value.sorByList;
-          var viewList = value.viewList;
-          return Container(
-            height: MediaQuery.of(context).size.height,
+    return Consumer<StoryFilterProvider>(
+      builder: (context, value, child) {
+        return Container(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
-                const ListTile(
-                  title: Text(
-                    "Sắp xếp",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
+                StoryFilterItem(
+                  filterItem: value.sorByList,
+                  filterType: StoryFilterValue.sort,
+                  title: "Sắp xếp",
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.sort);
+                  },
                 ),
-                Wrap(
-                  spacing: 5,
-                  children: sorByList
-                      .map((item) => FilterChip(
-                            label: Text(item['label']),
-                            showCheckmark: false,
-                            onSelected: (selected) {
-                              widget.setSorBy!(item['value']);
-
-                              var newSortByList = sorByList.map((chip) {
-                                return {
-                                  "label": chip['label'],
-                                  "value": chip['value'],
-                                  "isSelected": item == chip ? true : false,
-                                };
-                              }).toList();
-                              storyFilterProvider.changeSortList(newSortByList);
-                            },
-                            selected: item['isSelected'],
-                          ))
-                      .toList(),
+                StoryFilterItem(
+                  filterItem: value.viewList,
+                  filterType: StoryFilterValue.view,
+                  title: "Góc nhìn",
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.view);
+                  },
                 ),
-                const ListTile(
-                  title: Text(
-                    "Góc nhìn",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
+                StoryFilterItem(
+                  title: "Thể loại",
+                  filterItem: value.categoryList,
+                  filterType: StoryFilterValue.category,
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.category);
+                  },
                 ),
-                Wrap(
-                  spacing: 5,
-                  children: viewList
-                      .map((item) => FilterChip(
-                            label: Text(item['label']),
-                            showCheckmark: false,
-                            onSelected: (selected) {
-                              widget.setView!(item['value']);
-                              var newViewList = viewList.map((each) {
-                                return {
-                                  "label": each['label'],
-                                  "value": each['value'],
-                                  "isSelected": item == each ? true : false,
-                                };
-                              }).toList();
-                              storyFilterProvider.changeViewList(newViewList);
-                            },
-                            selected: item['isSelected'],
-                          ))
-                      .toList(),
+                StoryFilterItem(
+                  title: "Tính cách nhân vật",
+                  filterItem: value.characterList,
+                  filterType: StoryFilterValue.character,
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.character);
+                  },
+                ),
+                StoryFilterItem(
+                  title: "Bối cảnh thế giới",
+                  filterItem: value.worldBuildingList,
+                  filterType: StoryFilterValue.world,
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.world);
+                  },
+                ),
+                StoryFilterItem(
+                  title: "Lưu phái",
+                  filterItem: value.tagList,
+                  filterType: StoryFilterValue.tag,
+                  setSelectedFilter: (value) {
+                    widget.setSelected(value, StoryFilterValue.tag);
+                  },
                 ),
               ],
-            ),
-          );
-        },
-      ),
+            ));
+      },
     );
     ;
   }
