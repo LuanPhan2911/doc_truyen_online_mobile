@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_reading_item.dart';
+import 'package:doc_truyen_online_mobile/components/story/reading_page/story_marking_item.dart';
+import 'package:doc_truyen_online_mobile/components/story/reading_page/story_reading_item.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/data/utils/paginator.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
@@ -8,14 +9,14 @@ import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class StoryReading extends StatefulWidget {
-  const StoryReading({super.key});
+class StoryMarking extends StatefulWidget {
+  const StoryMarking({super.key});
 
   @override
-  State<StoryReading> createState() => _StoryReadingState();
+  State<StoryMarking> createState() => _StoryReadingState();
 }
 
-class _StoryReadingState extends State<StoryReading> {
+class _StoryReadingState extends State<StoryMarking> {
   final _pagingController = PagingController<int, Story>(firstPageKey: 1);
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _StoryReadingState extends State<StoryReading> {
 
   Future<void> fetchStory(int? page) async {
     try {
-      Response res = await UserService.getHistoryReadingPaginate(page);
+      Response res = await UserService.getStoryMarkedPaginate(page);
       var storyPaginate =
           Paginator<Story>.fromJson(res.data['data'], (t) => Story.fromJson(t));
 
@@ -57,7 +58,7 @@ class _StoryReadingState extends State<StoryReading> {
       child: PagedListView.separated(
         builderDelegate: PagedChildBuilderDelegate<Story>(
           itemBuilder: (context, item, index) {
-            return StoryReadingItem(
+            return StoryMarkingItem(
               story: item,
               deleteStory: (story) {
                 if (story != null) {

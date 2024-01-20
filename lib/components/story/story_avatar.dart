@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class StoryAvatar extends StatelessWidget {
   final String avatar;
-
+  final double radius;
   final VoidCallback? onTap;
   const StoryAvatar({
     super.key,
     required this.avatar,
     this.onTap,
+    this.radius = 15,
   });
 
   @override
@@ -18,7 +18,7 @@ class StoryAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(radius),
         child: CachedNetworkImage(
           fit: BoxFit.cover,
           imageUrl: Helper.asset(avatar),

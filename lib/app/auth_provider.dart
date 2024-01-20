@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
+
 import 'package:doc_truyen_online_mobile/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,9 +20,7 @@ class AuthProvider extends ChangeNotifier {
         _isAuth = true;
         notifyListeners();
       }
-    } on Dio.DioException catch (e) {
-      Helper.logWarning(e);
-    }
+    } on Dio.DioException catch (e) {}
   }
 
   void updateProfile(User? user) {
@@ -40,9 +38,7 @@ class AuthProvider extends ChangeNotifier {
           user = User.fromJson(res.data['data']);
           _isAuth = true;
         }
-      } on Dio.DioException catch (e) {
-        Helper.logWarning(e);
-      }
+      } on Dio.DioException catch (e) {}
     } else {
       _isAuth = false;
       user = null;
@@ -61,9 +57,7 @@ class AuthProvider extends ChangeNotifier {
           user = null;
           _isAuth = false;
         }
-      } on Dio.DioException catch (e) {
-        Helper.logWarning(e);
-      }
+      } on Dio.DioException catch (e) {}
     }
     notifyListeners();
   }

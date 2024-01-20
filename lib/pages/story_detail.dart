@@ -5,13 +5,16 @@ import 'package:doc_truyen_online_mobile/components/chapter/chapter_list.dart';
 import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_description.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_detail_background.dart';
+import 'package:doc_truyen_online_mobile/components/story/detail_page/story_description.dart';
+import 'package:doc_truyen_online_mobile/components/story/detail_page/story_detail_background.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
+import 'package:doc_truyen_online_mobile/data/models/user.dart';
+import 'package:doc_truyen_online_mobile/helpers/toast.dart';
 import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
+import 'package:doc_truyen_online_mobile/services/user_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,16 @@ class _StoryDetailState extends State<StoryDetail> {
     // TODO: implement initState
     super.initState();
     story = fetchStory(widget.slug);
+  }
+
+  Future<void> createStoryMarking({required int storyId}) async {
+    try {
+      Response res = await UserService.postStoryMarking(storyId, {"index": 0});
+      if (res.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Toast.success(context, "Đánh dấu thành công!");
+      }
+    } catch (e) {}
   }
 
   @override
@@ -122,7 +135,12 @@ class _StoryDetailState extends State<StoryDetail> {
                                   ),
                                   IconButton(
                                     style: AppColor.iconBtnBlue,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      if (User.isAuth(context)) {
+                                        createStoryMarking(
+                                            storyId: storyDetail.id!);
+                                      }
+                                    },
                                     icon: const Icon(Icons.add_outlined),
                                   )
                                 ],

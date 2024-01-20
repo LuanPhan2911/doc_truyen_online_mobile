@@ -30,7 +30,6 @@ class AppRoute {
     register: (context) => const RegisterPage(),
     verifyEmail: (context) => const VerifyEmailPage(),
     forgotPassword: (context) => const ForgotPasswordPage(),
-    storySearch: (context) => const StorySearchPage(),
   };
   static const bottomNavigate = [
     StoryReadingPage(),

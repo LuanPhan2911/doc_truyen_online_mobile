@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
+import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/data/models/story_user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
@@ -55,12 +56,13 @@ class _StoryReadingItemState extends State<StoryReadingItem> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: 70,
-            height: 100,
+            width: 50,
+            height: 70,
             child: StoryAvatar(
+              radius: 5,
               avatar: widget.story.avatar!,
               onTap: () {
                 Story.showStoryDetail(context, widget.story.slug);
@@ -71,25 +73,26 @@ class _StoryReadingItemState extends State<StoryReadingItem> {
             width: 10,
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Story.showStoryDetail(context, widget.story.slug);
-                  },
-                  child: Text(
+            child: GestureDetector(
+              onTap: () {
+                Chapter.showChapter(context,
+                    slug: widget.story.slug, index: storyUser.index!);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     widget.story.name,
                     style: AppText.subtitle,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Text(
-                  "Đã đọc ${storyUser.index}/${widget.story.chaptersCount}",
-                  style: AppText.content,
-                )
-              ],
+                  Text(
+                    "Đã đọc ${storyUser.index}/${widget.story.chaptersCount}",
+                    style: AppText.content,
+                  )
+                ],
+              ),
             ),
           ),
           IconButton(

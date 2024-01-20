@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/app/story_filter_provider.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_newest_detail.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_title_bar.dart';
+import 'package:doc_truyen_online_mobile/components/story/home_page/story_newest_detail.dart';
+import 'package:doc_truyen_online_mobile/components/story/home_page/story_title_bar.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StoryNewest extends StatefulWidget {
   const StoryNewest({super.key});
@@ -24,7 +26,8 @@ class _StoryNewestState extends State<StoryNewest> {
   }
 
   Future<List<Story>> fetchStories() async {
-    Response res = await StoryService.getStories();
+    Response res =
+        await StoryService.getFilterStories({"sort_by": "newest_updated"});
     return List.from(res.data['data']).map((e) => Story.fromJson(e)).toList();
   }
 
@@ -33,7 +36,17 @@ class _StoryNewestState extends State<StoryNewest> {
     return Card(
       child: Column(
         children: [
-          const StoryTitleBar(title: "Mới nhất"),
+          StoryTitleBar(
+            title: "Mới nhất",
+            onShowDetail: () {
+              Provider.of<StoryFilterProvider>(context, listen: false)
+                  .changeSelectedSortBy("newest_updated");
+
+              Story.showFilterStories(
+                context,
+              );
+            },
+          ),
           SizedBox(
             height: 350,
             child: FutureBuilder(

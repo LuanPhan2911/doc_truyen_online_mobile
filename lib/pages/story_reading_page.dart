@@ -1,6 +1,6 @@
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_marking.dart';
-import 'package:doc_truyen_online_mobile/components/story/story_reading.dart';
+import 'package:doc_truyen_online_mobile/components/story/reading_page/story_marking.dart';
+import 'package:doc_truyen_online_mobile/components/story/reading_page/story_reading.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';

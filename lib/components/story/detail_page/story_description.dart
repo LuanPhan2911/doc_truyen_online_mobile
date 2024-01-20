@@ -31,7 +31,7 @@ class StoryDescription extends StatelessWidget {
                     const Text("Chương- Đang ra", style: AppText.content),
                   ],
                 ),
-                Column(
+                const Column(
                   children: [
                     Text('599', style: AppText.bigTitle),
                     Text("Lượt đọc", style: AppText.content),

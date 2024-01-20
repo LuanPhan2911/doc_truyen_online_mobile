@@ -1,8 +1,8 @@
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/app/chapter_provider.dart';
+import 'package:doc_truyen_online_mobile/app/story_filter_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
-import 'package:doc_truyen_online_mobile/styles/app_color.dart';
-import 'package:doc_truyen_online_mobile/styles/app_them.dart';
+import 'package:doc_truyen_online_mobile/styles/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +18,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ChapterProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StoryFilterProvider(),
         ),
       ],
       child: const MainApp(),

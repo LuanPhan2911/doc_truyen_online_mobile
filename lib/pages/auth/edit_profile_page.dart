@@ -62,9 +62,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           setUser(user);
           Toast.success(context, "Cập nhật hồ sơ thành công");
         }
-      } on DioException catch (e) {
-        Helper.logWarning(e);
-      }
+      } on DioException catch (e) {}
     }
   }
 

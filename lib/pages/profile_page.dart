@@ -1,17 +1,11 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
 import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
 import 'package:doc_truyen_online_mobile/data/models/user.dart';
 import 'package:doc_truyen_online_mobile/helpers/helper.dart';
-import 'package:doc_truyen_online_mobile/pages/auth/edit_profile_page.dart';
-import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

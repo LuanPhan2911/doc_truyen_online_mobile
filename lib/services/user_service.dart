@@ -20,4 +20,21 @@ class UserService {
       "/api/users/stories/$storyId/reading/delete",
     );
   }
+
+  static Future<Response> deleteStoryMarking(int storyId) {
+    return dio().delete(
+      "/api/users/stories/$storyId/marking/delete",
+    );
+  }
+
+  static Future<Response> getStoryMarkedPaginate(int? page) {
+    return dio().get(
+      "/api/users/stories/marking/paginate",
+      queryParameters: {"page": page},
+    );
+  }
+
+  static Future<Response> postStoryMarking(int storyId, data) {
+    return dio().post("/api/users/stories/$storyId/marking/create", data: data);
+  }
 }

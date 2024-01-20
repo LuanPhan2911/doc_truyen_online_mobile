@@ -1,13 +1,22 @@
-import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:doc_truyen_online_mobile/app/story_filter_provider.dart';
+import 'package:doc_truyen_online_mobile/components/story/filter_page/story_filter.dart';
+import 'package:doc_truyen_online_mobile/components/story/filter_page/story_search_item.dart';
+import 'package:doc_truyen_online_mobile/data/models/story.dart';
+import 'package:doc_truyen_online_mobile/data/utils/paginator.dart';
 
-import 'package:doc_truyen_online_mobile/components/story/story_avatar.dart';
-import 'package:doc_truyen_online_mobile/configs/app_routes.dart';
+import 'package:doc_truyen_online_mobile/services/story_sevice.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
 class StorySearchPage extends StatefulWidget {
+  final String? name;
+
   const StorySearchPage({
     super.key,
+    this.name,
   });
 
   @override
@@ -15,160 +24,115 @@ class StorySearchPage extends StatefulWidget {
 }
 
 class _StorySearchPageState extends State<StorySearchPage> {
-  bool isSearch = false;
-  bool isLoading = false;
-  final TextEditingController searchController =
-      TextEditingController(text: "");
-  final ScrollController scrollController = ScrollController();
-  List item = List.generate(10, (index) => index);
-
+  final _pagingController = PagingController<int, Story>(firstPageKey: 1);
+  late String? sortBy;
+  late int? view;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    searchController.addListener(handleSearch);
-    scrollController.addListener(loadMore);
-  }
 
-  void handleSearch() {}
+    var storyFilterProvider =
+        Provider.of<StoryFilterProvider>(context, listen: false);
+    view = storyFilterProvider.getSelected(storyFilterProvider.viewList);
+    sortBy = storyFilterProvider.getSelected(storyFilterProvider.sorByList);
 
-  void loadMore() async {
-    if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent) {
-      try {
-        isLoading = true;
-        await getStories();
-      } catch (e) {
-        print(e);
-      } finally {
-        isLoading = false;
-      }
-      setState(() {});
-    }
-  }
-
-  Future getStories() {
-    return Future.delayed(const Duration(seconds: 2), () {
-      item.addAll(List.generate(2, (index) => index));
+    _pagingController.addPageRequestListener((pageKey) {
+      fetchStory(pageKey);
     });
+  }
+
+  Future<void> fetchStory(int? page) async {
+    try {
+      Map<String, dynamic> query = {
+        "page": page,
+        "sort_by": sortBy,
+      };
+      if (widget.name != null) {
+        query.addAll({"name": widget.name});
+      }
+      if (view != null && view != 0) {
+        query.addAll({
+          "view": view,
+        });
+      }
+      Response res = await StoryService.getStories(query);
+      var storyPaginate =
+          Paginator<Story>.fromJson(res.data['data'], (t) => Story.fromJson(t));
+
+      if (storyPaginate.isLastPage()) {
+        _pagingController.appendLastPage(storyPaginate.data);
+      } else {
+        _pagingController.appendPage(
+            storyPaginate.data, storyPaginate.nextPage());
+      }
+    } catch (e) {
+      _pagingController.error = e;
+    }
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    searchController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: isSearch
-              ? TextField(
-                  controller: searchController,
-                  // autofocus: true,
-                )
-              : const Text("DS. Truyện"),
+          title: Text(
+            widget.name ?? "Lọc",
+            maxLines: 1,
+          ),
           actions: [
             IconButton(
                 onPressed: () {
-                  if (isSearch) {
-                    searchController.clear();
-                    setState(() {
-                      isSearch = false;
-                    });
-                  } else {
-                    setState(() {
-                      isSearch = true;
-                    });
-                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return StoryFilter(
+                        setSorBy: (sortBy) {
+                          this.sortBy = sortBy;
+                          _pagingController.refresh();
+                        },
+                        setView: (view) {
+                          this.view = view;
+                          _pagingController.refresh();
+                        },
+                      );
+                    },
+                  );
                 },
-                icon: isSearch
-                    ? const Icon(Icons.clear)
-                    : const Icon(Icons.search))
+                icon: const Icon(Icons.filter_alt))
           ],
         ),
-        body: ListView(
-          controller: scrollController,
-          children: [
-            ...List.generate(item.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 100,
-                          height: 120,
-                          // child: const StoryAvatar(),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: const TextSpan(
-                              style: AppText.contentBlue,
-                              children: <TextSpan>[
-                                TextSpan(text: "#Đô thị"),
-                                TextSpan(text: "#Tác giả"),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              "Tên truyện $index",
-                              style: AppText.subtitle,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            'Tên tác giả',
-                            style: AppText.content,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          RichText(
-                              text: const TextSpan(children: [
-                            WidgetSpan(
-                                child: Icon(
-                              Icons.star,
-                            )),
-                            TextSpan(text: "0.0", style: AppText.content),
-                            WidgetSpan(
-                                child: Icon(
-                              Icons.book,
-                            )),
-                            TextSpan(text: "512", style: AppText.content),
-                          ]))
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-            const Center(
-              child: CircularProgressIndicator(),
-            )
-          ],
+        body: RefreshIndicator(
+          onRefresh: () => Future.sync(
+            () => _pagingController.refresh(),
+          ),
+          child: PagedListView.separated(
+            builderDelegate: PagedChildBuilderDelegate<Story>(
+              itemBuilder: (context, item, index) {
+                return StorySearchItem(
+                  story: item,
+                );
+              },
+              noItemsFoundIndicatorBuilder: (context) {
+                return const Center(
+                  child: Text(
+                    "Không tìm thấy truyện phù hợp",
+                    style: AppText.title,
+                  ),
+                );
+              },
+            ),
+            // 4
+            pagingController: _pagingController,
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 8,
+            ),
+          ),
         ));
   }
 }
