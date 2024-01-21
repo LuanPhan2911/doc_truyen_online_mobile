@@ -5,24 +5,12 @@ import 'package:doc_truyen_online_mobile/data/utils/story_filter_value.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StoryFilter extends StatefulWidget {
+class StoryFilter extends StatelessWidget {
   final void Function(dynamic value, int type) setSelected;
   const StoryFilter({
     super.key,
     required this.setSelected,
   });
-
-  @override
-  State<StoryFilter> createState() => _StoryFilterState();
-}
-
-class _StoryFilterState extends State<StoryFilter> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<StoryFilterProvider>(context, listen: false).getGenres();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<StoryFilterProvider>(
@@ -36,7 +24,7 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterType: StoryFilterValue.sort,
                   title: "Sắp xếp",
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.sort);
+                    setSelected(value, StoryFilterValue.sort);
                   },
                 ),
                 StoryFilterItem(
@@ -44,7 +32,7 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterType: StoryFilterValue.view,
                   title: "Góc nhìn",
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.view);
+                    setSelected(value, StoryFilterValue.view);
                   },
                 ),
                 StoryFilterItem(
@@ -52,7 +40,7 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterItem: value.categoryList,
                   filterType: StoryFilterValue.category,
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.category);
+                    setSelected(value, StoryFilterValue.category);
                   },
                 ),
                 StoryFilterItem(
@@ -60,7 +48,7 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterItem: value.characterList,
                   filterType: StoryFilterValue.character,
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.character);
+                    setSelected(value, StoryFilterValue.character);
                   },
                 ),
                 StoryFilterItem(
@@ -68,7 +56,7 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterItem: value.worldBuildingList,
                   filterType: StoryFilterValue.world,
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.world);
+                    setSelected(value, StoryFilterValue.world);
                   },
                 ),
                 StoryFilterItem(
@@ -76,13 +64,12 @@ class _StoryFilterState extends State<StoryFilter> {
                   filterItem: value.tagList,
                   filterType: StoryFilterValue.tag,
                   setSelectedFilter: (value) {
-                    widget.setSelected(value, StoryFilterValue.tag);
+                    setSelected(value, StoryFilterValue.tag);
                   },
                 ),
               ],
             ));
       },
     );
-    ;
   }
 }

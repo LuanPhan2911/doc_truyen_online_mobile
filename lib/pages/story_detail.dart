@@ -95,11 +95,13 @@ class _StoryDetailState extends State<StoryDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
+                                width: 150,
                                 padding: const EdgeInsets.all(4),
                                 decoration: AppColor.textBoxBlue,
                                 child: Text(
                                   storyDetail.genre!.name!,
                                   style: AppText.subtitle,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               const SizedBox(
@@ -172,9 +174,10 @@ class _StoryDetailState extends State<StoryDetail> {
                       body: TabBarView(
                         children: [
                           StoryDescription(
-                            description: storyDetail.description ?? "",
-                            chaptersCount: "${storyDetail.chaptersCount ?? 0}",
-                          ),
+                              description: storyDetail.description ?? "",
+                              chaptersCount:
+                                  "${storyDetail.chaptersCount ?? 0}",
+                              genres: storyDetail.genres!),
                           Center(
                             child: TextButton(
                               onPressed: () {

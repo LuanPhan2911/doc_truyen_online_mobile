@@ -31,4 +31,6 @@ class Genre {
         .toList()
       ..insert(0, {"label": "Tất cả", "value": 0, "isSelected": true});
   }
+
+  static bool isExist(dynamic value) => value != null && value != 0;
 }

@@ -1,3 +1,4 @@
+import 'package:doc_truyen_online_mobile/data/models/genre.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,13 @@ import 'package:flutter/material.dart';
 class StoryDescription extends StatelessWidget {
   final String description;
   final String chaptersCount;
-  const StoryDescription(
-      {super.key, required this.description, required this.chaptersCount});
+  final List<Genre> genres;
+  const StoryDescription({
+    super.key,
+    required this.description,
+    required this.chaptersCount,
+    required this.genres,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +44,31 @@ class StoryDescription extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 10,
+              children: genres
+                  .map(
+                    (e) => Container(
+                      padding: const EdgeInsets.all(4),
+                      margin: const EdgeInsets.all(4),
+                      width: 170,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColor.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        e.name!,
+                        style: AppText.content,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
           Container(

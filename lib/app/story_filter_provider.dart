@@ -95,7 +95,7 @@ class StoryFilterProvider extends ChangeNotifier {
         selectedList = sorByList;
         break;
       case StoryFilterValue.character:
-        selectedList = categoryList;
+        selectedList = characterList;
         break;
       case StoryFilterValue.category:
         selectedList = categoryList;

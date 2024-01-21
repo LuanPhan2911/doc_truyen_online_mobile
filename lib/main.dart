@@ -41,6 +41,7 @@ class _MainAppState extends State<MainApp> {
     // TODO: implement initState
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).tryToken();
+    Provider.of<StoryFilterProvider>(context, listen: false).getGenres();
   }
 
   @override

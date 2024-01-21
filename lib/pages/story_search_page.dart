@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/app/story_filter_provider.dart';
 import 'package:doc_truyen_online_mobile/components/story/filter_page/story_filter.dart';
 import 'package:doc_truyen_online_mobile/components/story/filter_page/story_search_item.dart';
+import 'package:doc_truyen_online_mobile/data/models/genre.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
 import 'package:doc_truyen_online_mobile/data/utils/paginator.dart';
 import 'package:doc_truyen_online_mobile/data/utils/story_filter_value.dart';
@@ -30,6 +31,9 @@ class _StorySearchPageState extends State<StorySearchPage> {
   late String? sortBy;
   late int? view;
   late int? category;
+  late int? character;
+  late int? world;
+  late int? tag;
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +44,10 @@ class _StorySearchPageState extends State<StorySearchPage> {
     view = storyFilterProvider.getFilterSelected(StoryFilterValue.view);
     sortBy = storyFilterProvider.getFilterSelected(StoryFilterValue.sort);
     category = storyFilterProvider.getFilterSelected(StoryFilterValue.category);
+    character =
+        storyFilterProvider.getFilterSelected(StoryFilterValue.character);
+    world = storyFilterProvider.getFilterSelected(StoryFilterValue.world);
+    tag = storyFilterProvider.getFilterSelected(StoryFilterValue.tag);
 
     _pagingController.addPageRequestListener((pageKey) {
       fetchStory(pageKey);
@@ -56,15 +64,26 @@ class _StorySearchPageState extends State<StorySearchPage> {
         query.addAll({"name": widget.name});
       }
       if (view != null && view != 0) {
-        query.addAll({
-          "view": view,
-        });
+        query.addAll({"view": view});
       }
-      if (category != null) {
-        // query.addAll({
-        //   "genres_id": [category]
-        // });
+
+      List<int> genresId = [];
+      if (Genre.isExist(category)) {
+        genresId.add(category!);
       }
+      if (Genre.isExist(character)) {
+        genresId.add(character!);
+      }
+      if (Genre.isExist(world)) {
+        genresId.add(world!);
+      }
+      if (Genre.isExist(tag)) {
+        genresId.add(tag!);
+      }
+      if (genresId.isNotEmpty) {
+        query.addAll({"genres_id": genresId.join(",")});
+      }
+
       Response res = await StoryService.getStories(query);
       var storyPaginate =
           Paginator<Story>.fromJson(res.data['data'], (t) => Story.fromJson(t));
@@ -110,13 +129,16 @@ class _StorySearchPageState extends State<StorySearchPage> {
                             sortBy = value;
                             break;
                           case StoryFilterValue.character:
+                            character = value;
                             break;
                           case StoryFilterValue.category:
                             category = value;
                             break;
                           case StoryFilterValue.world:
+                            world = value;
                             break;
                           case StoryFilterValue.tag:
+                            tag = value;
                             break;
                           default:
                         }
