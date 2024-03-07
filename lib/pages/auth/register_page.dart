@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart' as Dio;
 import 'package:doc_truyen_online_mobile/app/auth_provider.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
 import 'package:doc_truyen_online_mobile/helpers/toast.dart';
 import 'package:doc_truyen_online_mobile/services/auth_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
@@ -37,7 +36,9 @@ class _RegisterPageState extends State<RegisterPage> {
           Toast.success(context, "Đăng ký thành công");
         }
       } on Dio.DioException catch (e) {
-        Toast.error(context, "Vui lòng kiểm tra lại thông tin đã nhập");
+        String? message = e.response?.data?['errors']?['email']?[0];
+        Toast.error(
+            context, message ?? "Vui lòng kiểm tra lại thông tin đã nhập");
       }
     }
   }
@@ -56,8 +57,8 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.network(
-                  "https://imgupscaler.com/images/samples/anime-after.webp",
+                Image.asset(
+                  "assets/auth.jpg",
                   width: 200,
                   height: 200,
                 ),

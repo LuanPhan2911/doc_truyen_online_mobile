@@ -27,7 +27,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _birthDateController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String? avatar;
-  String defaultAvatar = "assets/black_profile.png";
+  String defaultAvatar = "assets/blank_profile.png";
   XFile? fileAvatar;
   String? _fileAvatarPath;
   late int gender;

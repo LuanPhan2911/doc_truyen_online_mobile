@@ -94,19 +94,6 @@ class _StoryDetailState extends State<StoryDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: 150,
-                                padding: const EdgeInsets.all(4),
-                                decoration: AppColor.textBoxBlue,
-                                child: Text(
-                                  storyDetail.genre!.name!,
-                                  style: AppText.subtitle,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
                               Text(
                                 storyDetail.name,
                                 style: AppText.title,
