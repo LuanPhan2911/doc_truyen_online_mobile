@@ -1,9 +1,6 @@
-import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
 import 'package:doc_truyen_online_mobile/data/models/comment.dart';
 import 'package:doc_truyen_online_mobile/data/models/story.dart';
-import 'package:doc_truyen_online_mobile/pages/chapter_list_page.dart';
-import 'package:doc_truyen_online_mobile/pages/story_detail.dart';
 import 'package:flutter/material.dart';
 
 class ChapterConfigInfo extends StatelessWidget {

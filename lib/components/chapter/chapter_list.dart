@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:doc_truyen_online_mobile/components/chapter/chapter_list_detail.dart';
 import 'package:doc_truyen_online_mobile/components/layouts/no_data_from_server.dart';
 import 'package:doc_truyen_online_mobile/data/models/chapter.dart';
-import 'package:doc_truyen_online_mobile/helpers/helper.dart';
-import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/services/chapter_service.dart';
 import 'package:doc_truyen_online_mobile/styles/app_color.dart';
 import 'package:doc_truyen_online_mobile/styles/app_text.dart';

@@ -1,15 +1,11 @@
 import 'package:doc_truyen_online_mobile/components/layouts/bottom_navigate.dart';
-import 'package:doc_truyen_online_mobile/components/comments/comments.dart';
-import 'package:doc_truyen_online_mobile/pages/chapter_page.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/forgot_password_page.dart';
 import 'package:doc_truyen_online_mobile/pages/home_page.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/login_page.dart';
 import 'package:doc_truyen_online_mobile/pages/profile_page.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/register_page.dart';
-import 'package:doc_truyen_online_mobile/pages/story_detail.dart';
 import 'package:doc_truyen_online_mobile/pages/story_notify_page.dart';
 import 'package:doc_truyen_online_mobile/pages/story_reading_page.dart';
-import 'package:doc_truyen_online_mobile/pages/story_search_page.dart';
 import 'package:doc_truyen_online_mobile/pages/auth/verify_email_page.dart';
 
 class AppRoute {
