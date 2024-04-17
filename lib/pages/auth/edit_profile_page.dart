@@ -106,6 +106,49 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  void showBottomSheetSelectImage() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await getImage(ImageSource.camera);
+                    },
+                    icon: const Icon(Icons.camera),
+                  ),
+                  const Text("Camera")
+                ],
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await getImage(ImageSource.gallery);
+                    },
+                    icon: const Icon(Icons.library_add),
+                  ),
+                  const Text(
+                    "Thư viên",
+                  )
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -134,171 +177,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                              height: 100,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await getImage(ImageSource.camera);
-                                        },
-                                        icon: const Icon(Icons.camera),
-                                      ),
-                                      const Text("Camera")
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await getImage(ImageSource.gallery);
-                                        },
-                                        icon: const Icon(Icons.library_add),
-                                      ),
-                                      const Text(
-                                        "Thư viên",
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          ClipOval(
-                            child: _fileAvatarPath != null
-                                ? Image(
-                                    image: FileImage(File(_fileAvatarPath!)),
-                                    fit: BoxFit.cover,
-                                    width: 150,
-                                    height: 150,
-                                  )
-                                : avatar == null
-                                    ? Image.asset(
-                                        defaultAvatar,
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      )
-                                    : CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                        imageUrl: Helper.asset(avatar),
-                                        progressIndicatorBuilder: (context, url,
-                                                downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                      ),
-                          ),
-                          const Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: Icon(
-                              Icons.camera_enhance,
-                            ),
-                          )
-                        ],
-                      ),
+                      onTap: showBottomSheetSelectImage,
+                      child: buildSelectImage(),
                     ),
                   ],
                 ),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    hintText: "Tên người dùng",
-                    prefixIcon: Icon(Icons.child_friendly),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Vui lòng điền email!';
-                    }
-                    return null;
-                  },
-                ),
+                buildNameField(),
                 const SizedBox(
                   height: 16,
                 ),
-                TextFormField(
-                  controller: _emailController,
-                  enabled: false,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                ),
+                buildEmailField(),
                 const SizedBox(
                   height: 16,
                 ),
-                TextFormField(
-                  controller: _birthDateController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: "Năm sinh",
-                    labelText: "Năm sinh",
-                    prefixIcon: Icon(Icons.date_range),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Năm sinh không hợp lệ!';
-                    }
-                    return null;
-                  },
-                ),
+                buildPhoneNumberField(),
                 const SizedBox(
                   height: 16,
                 ),
-                TextFormField(
-                  controller: _descriptionController,
-                  maxLines: 5,
-                  minLines: 3,
-                  decoration: const InputDecoration(
-                    hintText: "Giới thiệu ngắn",
-                    labelText: "Giới thiệu ngắn",
-                    prefixIcon: Icon(Icons.text_fields),
-                  ),
-                ),
+                buildDescriptionField(),
                 const SizedBox(
                   height: 16,
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: SegmentedButton(
-                    showSelectedIcon: false,
-                    segments: [
-                      ButtonSegment(
-                        value: genders['male'],
-                        label: const Text("Nam"),
-                        icon: const Icon(Icons.boy),
-                      ),
-                      ButtonSegment(
-                        value: genders['female'],
-                        label: const Text("Nữ"),
-                        icon: const Icon(Icons.girl),
-                      ),
-                    ],
-                    selected: {gender},
-                    onSelectionChanged: (item) {
-                      setState(() {
-                        gender = item.first!;
-                      });
-                    },
-                  ),
+                  child: buildGenderField(),
                 ),
                 const SizedBox(
                   height: 16,
@@ -315,6 +217,129 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
       ),
+    );
+  }
+
+  SegmentedButton<int?> buildGenderField() {
+    return SegmentedButton(
+      showSelectedIcon: false,
+      segments: [
+        ButtonSegment(
+          value: genders['male'],
+          label: const Text("Nam"),
+          icon: const Icon(Icons.boy),
+        ),
+        ButtonSegment(
+          value: genders['female'],
+          label: const Text("Nữ"),
+          icon: const Icon(Icons.girl),
+        ),
+      ],
+      selected: {gender},
+      onSelectionChanged: (item) {
+        setState(() {
+          gender = item.first!;
+        });
+      },
+    );
+  }
+
+  TextFormField buildDescriptionField() {
+    return TextFormField(
+      controller: _descriptionController,
+      maxLines: 5,
+      minLines: 3,
+      decoration: const InputDecoration(
+        hintText: "Giới thiệu ngắn",
+        labelText: "Giới thiệu ngắn",
+        prefixIcon: Icon(Icons.text_fields),
+      ),
+    );
+  }
+
+  TextFormField buildPhoneNumberField() {
+    return TextFormField(
+      controller: _birthDateController,
+      keyboardType: TextInputType.number,
+      decoration: const InputDecoration(
+        hintText: "Năm sinh",
+        labelText: "Năm sinh",
+        prefixIcon: Icon(Icons.date_range),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Năm sinh không hợp lệ!';
+        }
+        return null;
+      },
+    );
+  }
+
+  TextFormField buildEmailField() {
+    return TextFormField(
+      controller: _emailController,
+      enabled: false,
+      decoration: const InputDecoration(
+        prefixIcon: Icon(Icons.email),
+      ),
+    );
+  }
+
+  TextFormField buildNameField() {
+    return TextFormField(
+      controller: _nameController,
+      decoration: const InputDecoration(
+        hintText: "Tên người dùng",
+        prefixIcon: Icon(Icons.child_friendly),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Vui lòng điền email!';
+        }
+        return null;
+      },
+    );
+  }
+
+  Stack buildSelectImage() {
+    return Stack(
+      children: [
+        ClipOval(
+          child: _fileAvatarPath != null
+              ? Image(
+                  image: FileImage(File(_fileAvatarPath!)),
+                  fit: BoxFit.cover,
+                  width: 150,
+                  height: 150,
+                )
+              : avatar == null
+                  ? Image.asset(
+                      defaultAvatar,
+                      fit: BoxFit.cover,
+                      width: 150,
+                      height: 150,
+                    )
+                  : CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      width: 150,
+                      height: 150,
+                      imageUrl: Helper.asset(avatar),
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+        ),
+        const Positioned(
+          bottom: 10,
+          right: 10,
+          child: Icon(
+            Icons.camera_enhance,
+          ),
+        )
+      ],
     );
   }
 }

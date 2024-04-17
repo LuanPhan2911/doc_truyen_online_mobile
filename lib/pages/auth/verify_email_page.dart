@@ -14,8 +14,8 @@ class VerifyEmailPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(
-              "https://imgupscaler.com/images/samples/anime-after.webp",
+            Image.asset(
+              "assets/auth.jpg",
               width: 200,
               height: 200,
             ),
